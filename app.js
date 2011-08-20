@@ -28,7 +28,8 @@ app.configure('production', function(){
 
 var renderPage = function(req, res, page) {
   res.render(page, {
-    page: page
+    page: page,
+    secure: req.headers['x-forwarded-proto'] = 'https'
   });
 }
 
