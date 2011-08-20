@@ -555,7 +555,7 @@ var page = new function() {
       $('#desksms-header-link').attr('href', 'http://www.clockworkmod.com/desksms');
       $('.content-container').css('width', '95%');
     }
-    $('#connect-google').attr('href', googleContacts.getAuthorizationUrl());
+    $('.connect-google').attr('href', googleContacts.getAuthorizationUrl());
     
     page.setClickHandlers();
   });
@@ -563,7 +563,7 @@ var page = new function() {
   var successfullyRetrievedContact = false;
   contacts.onNewContact(function(contact) {
     if (!successfullyRetrievedContact) {
-      $('.connect-google-header').hide();
+      $('#connect-google').hide();
       successfullyRetrievedContact = true;
     }
     var conversation = desksms.findConversation(contact.number);
@@ -589,7 +589,7 @@ var page = new function() {
     $('#account-status').show();
     if (daysLeft < 14 || page.sandbox) {
       $('#buy-desksms').text(sprintf("%d days left. Extend now!", daysLeft));
-      $('#buy-desksms-container').show();
+      $('#buy-desksms').removeClass('hidden');
     }
   }
   

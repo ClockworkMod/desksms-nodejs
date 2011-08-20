@@ -1,4 +1,4 @@
-div.topbar li.hidden {
+div.topbar a.hidden {
     display: none;
 }
 
@@ -20,4 +20,12 @@ div.topbar li.hidden {
 
 .padded-bottom {
   padding-bottom: 6px;
+}
+
+#buy-desksms {
+    color: red;
+}
+
+#account-status {
+    color: red;
 }

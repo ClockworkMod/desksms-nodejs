@@ -5,13 +5,13 @@
         a#desksms-header-link.logo(href='javascript:void(0)') DeskSMS
       ul
         li
-          a#desksms-login.link(href='javascript:void(0)') Login
-        li.connect-google-header
-          a#connect-google.link(href='javascript:void(0)') Sync Contacts
-        li.enable-chrome-notifications.hidden
-          a(href='javascript:notifications.requestPermissions()') Enable Notifications
-        li#buy-desksms-container.hidden
-          a#buy-desksms.buy-desksms(href='javascript:page.purchase()')
+          a#desksms-login.login-hide.link(href='javascript:void(0)') Login
+        li
+          a#connect-google.connect-google.link(href='javascript:void(0)') Sync Contacts
+        li
+          a.enable-chrome-notifications.hidden(href='javascript:notifications.requestPermissions()') Enable Notifications
+        li
+          a#buy-desksms.buy-desksms.hidden(href='javascript:page.purchase()')
 
       form(action='javascript:void(0)')
         input#contact-search(type='text', placeholder='Enter Contact Name or Number')
@@ -24,12 +24,10 @@
             li
               a(href='javascript:page.showNotificationSettings()') Notification
             li
-              a(href='#') Secondary Link
-            li
-              a(href='#') Secondary Link
+              a.connect-google.link(href='javascript:void(0)') Sync Contacts
             li.divider
             li
-              a(href='#') Secondary Link
+              a#desksms-login.login-show.link.hidden(href='javascript:void(0)') Logout
       script
         $(document).ready(function(){
           $("body").bind("click", function(e) {
