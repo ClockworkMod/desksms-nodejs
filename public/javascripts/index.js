@@ -245,7 +245,8 @@ var page = new function() {
         }
       
       if (afterMessage == null)
-        messageContainer.append(messageElement);
+        $(messageElement).insertBefore(messageContainer.find('#last-message'));
+//        messageContainer.append(messageElement);
       else
         $(messageElement).insertAfter('#message-' + afterMessage.id);
     }

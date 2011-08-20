@@ -100,22 +100,22 @@
             span=' '
             img.message-pending(src='images/message-pending.png')
 
-      .message-panel-footer.row
-        .span7.columns.offset3
+          #last-message.padded-bottom
+          .padded-bottom
           form.contact-text-container-hidden.hidden(action='javascript:void(0)')
             input.xlarge.contact-text-content(type="text", style='width: 100%')
             .contact-text-character-count
-      center
-        .contact-action-confirm-dialog.hidden.row
-          .span7.columns.offset3
-            .contact-action-confirm-question Are you sure?
-            a.btn.small.primary.contact-action-confirm-yes(href='javascript:void(0);') Yes
-            a.btn.small.contact-action-confirm-no(href='javascript:void(0);') No
-      .row
-        .span7.columns.offset3
-          a.contact-text.btn.small.primary(href='javascript:void(0);') Text
-          a.contact-call.btn.small(href='javascript:void(0);') Call
-          a.contact-delete.btn.small(href='javascript:void(0);') Delete
+
+          center
+            .contact-action-confirm-dialog.hidden
+              .contact-action-confirm-question Are you sure?
+              a.btn.small.primary.contact-action-confirm-yes(href='javascript:void(0);') Yes
+              a.btn.small.contact-action-confirm-no(href='javascript:void(0);') No
+
+          div
+            a.contact-text.btn.small.primary(href='javascript:void(0);') Text
+            a.contact-call.btn.small(href='javascript:void(0);') Call
+            a.contact-delete.btn.small(href='javascript:void(0);') Delete
   
 
 
