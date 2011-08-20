@@ -1,4 +1,4 @@
-.container
+.topbar-wrapper(style="z-index: 5;")
   .topbar
     .container.fixed
       h3
@@ -15,7 +15,7 @@
 
       form(action='javascript:void(0)')
         input#contact-search(type='text', placeholder='Enter Contact Name or Number')
-      
+
       ul.nav
         li.menu
           a.menu(href='#')
@@ -56,6 +56,7 @@
            });
           });
 
+.container
   - each notification in notifications
     audio.hidden(id='notification-' + notification)
       source(src='notifications/' + notification + '.ogg')
