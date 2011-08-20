@@ -41,7 +41,7 @@ var renderPage = function(req, res, page, templateArgs) {
 // Routes
 
 app.get('/', function(req, res){
-  res.header('Cache-Control', 'max-age: 3600')
+  res.header('Cache-Control', 'max-age=3600')
   var notificationFiles = fs.readdirSync(__dirname + '/public/notifications');
   var notifications = []
   for (var i in notificationFiles) {
