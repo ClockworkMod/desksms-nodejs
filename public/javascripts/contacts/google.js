@@ -18,7 +18,7 @@ var googleContacts = new function() {
       if (!successfulGet && extension == 'firefox')
         setTimeout(haveToken, 5000);
 
-      var token = $.cookie('google.access_token');
+      var token = localStorage['google.access_token'];
       
       if (!token)
         return;
@@ -66,7 +66,7 @@ var googleContacts = new function() {
     var query = $.query.load(window.location.hash);
     var access_token = query.get('access_token');
     if (access_token) {
-      $.cookie('google.access_token', access_token);
+      localStorage['google.access_token'] = access_token;
       window.location.hash = '';
     }
 

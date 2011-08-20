@@ -29,3 +29,8 @@ div.topbar a.hidden {
 #account-status {
     color: red;
 }
+
+.contact-text-character-count {
+    padding: 6px;
+    font-weight: bold;
+}
