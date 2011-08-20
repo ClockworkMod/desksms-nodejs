@@ -51,14 +51,19 @@ var notifications = new function() {
     var title = sprintf("SMS Received: %s", displayName);
     this.showNotification(icon, title, message.message);
   }
-  
+
   $(document).ready(function() {
     query = $.query.load(window.location.hash);
     extension = query.get('extension');
 
+    if (!window.webkitNotifications) {
+      $('#enable-chrome-notifications').remove();
+      return;
+    }
+
     if (window.webkitNotifications && !extension) {
-      if (webkitNotifications.checkPermission() != 0)
-        $('.enable-chrome-notifications').show();
+      if (webkitNotifications.checkPermission() == 0)
+        $('#enable-chrome-notifications').hide();
     }
   });
   

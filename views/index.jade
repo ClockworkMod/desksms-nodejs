@@ -8,8 +8,8 @@
           a#desksms-login.login-hide.link(href='javascript:void(0)') Login
         li
           a#connect-google.connect-google.link(href='javascript:void(0)') Sync Contacts
-        li
-          a.enable-chrome-notifications.hidden(href='javascript:notifications.requestPermissions()') Enable Notifications
+        li#enable-chrome-notifications
+          a(href='javascript:notifications.requestPermissions()') Enable Notifications
         li
           a#buy-desksms.buy-desksms.hidden(href='javascript:page.purchase()')
 
@@ -29,8 +29,8 @@
             li
               a(href='javascript:page.pong()') Test Connection
             li.divider
-            li
-              a#desksms-login.login-show.link.hidden(href='javascript:void(0)') Logout
+            li.login-show.hidden
+              a#desksms-login.link(href='javascript:void(0)') Logout
       script
         $(document).ready(function(){
           $("body").bind("click", function(e) {

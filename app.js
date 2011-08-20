@@ -18,7 +18,7 @@ app.configure(function(){
   app.use(app.router);
   var staticHandler = express.static(__dirname + '/public');
   app.use(function(req, res) {
-    res.header('Cache-Control', 'max-age=7200')
+    res.header('Cache-Control', 'max-age=600')
     staticHandler(req, res);
   });
 });
@@ -45,7 +45,7 @@ var renderPage = function(req, res, page, templateArgs) {
 // Routes
 
 app.get('/', function(req, res){
-  res.header('Cache-Control', 'max-age=7200')
+  res.header('Cache-Control', 'max-age=600')
   var notificationFiles = fs.readdirSync(__dirname + '/public/notifications');
   var notifications = []
   for (var i in notificationFiles) {
