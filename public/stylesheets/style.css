@@ -1,0 +1,15 @@
+div.topbar li.hidden {
+    display: none;
+}
+
+.hidden {
+    display: none;
+}
+
+#desksms-header-link {
+    color: #E27318;
+}
+
+.conversation-template {
+    padding-bottom: 40px;
+}

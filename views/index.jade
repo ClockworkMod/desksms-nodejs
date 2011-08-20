@@ -1,0 +1,87 @@
+.container
+  .topbar
+    .container.fixed
+      h3
+        a#desksms-header-link.logo(href='javascript:void(0)') DeskSMS
+      ul
+        li
+          a#desksms-login.link(href='javascript:void(0)') Login
+        li.connect-google-header
+          a#connect-google.link(href='javascript:void(0)') Sync Contacts
+        li.enable-chrome-notifications.hidden
+          a(href='javascript:notifications.requestPermissions()') Enable Notifications
+        li
+          a(href='javascript:page.toggleSound()')
+            img(id='sound-icon', src='images/sound_on.png')
+        li
+          a(href='javascript:page.options()')
+            img(id='options-icon', src='images/options.png')
+        li#buy-desksms-container.hidden
+          a#buy-desksms.buy-desksms(href='javascript:page.purchase()')
+
+      form(action='javascript:void(0)')
+        input#contact-search(type='text', placeholder='Enter Contact Name or Number')
+
+  audio#notification-sound.hidden
+    source(src='notifications/Tinkerbell.ogg')
+
+  .container(style='padding-top: 60px')
+
+  section#alerts
+    .row
+      .span12.columns
+        .alert-message.error.login-hide
+          p New to DeskSMS? Install the DeskSMS Android application to get started! If you have already installed the application, just log in above to send and receive your texts!
+          p
+            a.btn.small.link(href='https://market.android.com/details?id=com.koushikdutta.desktopsms') Download DeskSMS
+        #content-status-not-registered.alert-message.error.hidden
+          p Thanks for logging in! Now, you need to install the DeskSMS Android application on your phone send and receive texts!
+          p
+            a.btn.small.link(href='https://market.android.com/details?id=com.koushikdutta.desktopsms') Download DeskSMS
+        #content-status.content-status.hidden.alert-message.success
+
+  section#content-container
+    #conversation-template.conversation-template.hidden
+      .row
+        .span3.columns(align='center')
+          img.contact-image(src='images/contact.png')
+          h3
+            .contact-name
+          strong
+            .contact-number
+          h6
+            .contact-last-message-date
+          #conversation-id.hidden
+
+        #contact-messages-internal.span7.columns.well
+          #contact-message-template.contact-message-template.hidden
+            strong
+              span.message-from
+            span=': '
+            span.message-content
+            span=' '
+            em
+              span.message-date
+            span=' '
+            img.message-pending(src='images/message-pending.png')
+
+      .message-panel-footer.row
+        .span7.columns.offset3
+          form.contact-text-container-hidden.hidden
+            input.xlarge.contact-text-content(type="text", style='width: 100%')
+            .contact-text-character-count
+      center
+        .contact-action-confirm-dialog.hidden.row
+          .span7.columns.offset3
+            .contact-action-confirm-question Are you sure?
+            a.btn.small.primary.contact-action-confirm-yes(href='javascript:void(0);') Yes
+            a.btn.small.contact-action-confirm-no(href='javascript:void(0);') No
+      .row
+        .span7.columns.offset3
+          a.contact-text.btn.small.primary(href='javascript:void(0);') Text
+          a.contact-call.btn.small(href='javascript:void(0);') Call
+          a.contact-delete.btn.small(href='javascript:void(0);') Delete
+  
+
+
+iframe#push-iframe.hidden(src='push.html')
