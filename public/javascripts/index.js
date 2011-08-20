@@ -553,7 +553,8 @@ var page = new function() {
     if (extension) {
       $('.link').attr('target', '_blank');
       $('.github-fork').hide();
-      $('#desksms-header-link').attr('href', 'http://www.clockworkmod.com/desksms');
+      var fullSite = window.location.href.substring(0, window.location.href.indexOf('#'));
+      $('#desksms-header').attr('href', fullSite);
       $('.content-container').css('width', '95%');
     }
     $('.connect-google').attr('href', googleContacts.getAuthorizationUrl());
