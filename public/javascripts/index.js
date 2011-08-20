@@ -443,8 +443,6 @@ var page = new function() {
   }
 
   $(document).ready(function() {
-    page.updateSound();
-
     (function() {
       var input = $('#contact-search');
       input.keypress(function(event) {
@@ -685,21 +683,6 @@ var page = new function() {
     });
   }
 
-  this.toggleSound = function() {
-    if ($.cookie('play-sound')) {
-      $.cookie('play-sound', null);
-    }
-    else {
-      $('#notification-sound')[0].play();
-      $.cookie('play-sound', true);
-    }
-    this.updateSound();
-  }
-
-  this.updateSound = function() {
-    $('#sound-icon').attr('src', $.cookie('play-sound') ? 'images/sound_on.png' : 'images/sound_off.png');
-  }
-
   this.sandbox = false;
   if (this.sandbox) {
     google.load('payments', '1.0', {
@@ -779,5 +762,28 @@ var page = new function() {
         contentStatus.text('');
       });
     }, 10000);
+  }
+  
+  this.closeDialog = function(e) {
+    $(e).parents('.dialog-container').hide();
+  }
+  
+  this.showNotificationSettings = function() {
+    var sound = localStorage['play-sound'];
+    if (!sound)
+      sound = 'None';
+    $('#notification-button-' + sound).removeClass('secondary').addClass('primary');
+    $('#notification-settings').show();
+    
+  }
+  
+  this.setNotification = function(element) {
+    element = $(element);
+    var sound = element.text();
+    localStorage['play-sound'] = sound;
+    if (sound != 'None')
+      $('#notification-' + sound)[0].play();
+    $('.notification').removeClass('primary').addClass('secondary');
+    element.removeClass('secondary').addClass('primary');
   }
 }

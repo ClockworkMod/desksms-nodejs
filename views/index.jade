@@ -10,20 +10,54 @@
           a#connect-google.link(href='javascript:void(0)') Sync Contacts
         li.enable-chrome-notifications.hidden
           a(href='javascript:notifications.requestPermissions()') Enable Notifications
-        li
-          a(href='javascript:page.toggleSound()')
-            img(id='sound-icon', src='images/sound_on.png')
-        li
-          a(href='javascript:page.options()')
-            img(id='options-icon', src='images/options.png')
         li#buy-desksms-container.hidden
           a#buy-desksms.buy-desksms(href='javascript:page.purchase()')
 
       form(action='javascript:void(0)')
         input#contact-search(type='text', placeholder='Enter Contact Name or Number')
+      
+      ul.nav
+        li.menu
+          a.menu(href='#')
+            img(src='images/options.png')
+          ul.menu-dropdown
+            li
+              a(href='javascript:page.showNotificationSettings()') Notification
+            li
+              a(href='#') Secondary Link
+            li
+              a(href='#') Secondary Link
+            li.divider
+            li
+              a(href='#') Secondary Link
+      script
+        $(document).ready(function(){
+          $("body").bind("click", function(e) {
+              $("ul.menu-dropdown").hide();
+              $('a.menu').parent("li").removeClass("open").children("ul.menu-dropdown").hide();
+            });
 
-  audio#notification-sound.hidden
-    source(src='notifications/Tinkerbell.ogg')
+          $("a.menu").click(function(e) {
+             var $target = $(this);
+             var $parent = $target.parent("li");
+             var $siblings = $target.siblings("ul.menu-dropdown");
+             var $parentSiblings = $parent.siblings("li");
+             if ($parent.hasClass("open")) {
+               $parent.removeClass("open");
+               $siblings.hide();
+             } else {
+               $parent.addClass("open");
+               $siblings.show();
+             }
+             $parentSiblings.children("ul.menu-dropdown").hide();
+             $parentSiblings.removeClass("open");
+             return false;
+           });
+          });
+
+  - each notification in notifications
+    audio.hidden(id='notification-' + notification)
+      source(src='notifications/' + notification + '.ogg')
 
   .container(style='padding-top: 60px')
 
@@ -85,3 +119,31 @@
 
 
 iframe#push-iframe.hidden(src='push.html')
+
+#notification-settings.hidden.dialog-container
+  .ui-dialog(style='outline-width: 0px; outline-style: initial; outline-color: initial; height: auto; width: auto; top: 100px; left: 400px; display: block; z-index: 1001;')
+    #test-modal.modal(style='position: relative; top: auto; left: auto; margin: 0 auto; z-index: 1')
+      .modal-header
+        h3 Notification Settings
+        a.close(href='javascript:void(0)', onclick='page.closeDialog(this)') &times;
+      section.modal-body
+        - var count = 0
+        - var current = null
+        - var rows = []
+        - each notification in notifications
+          - if (count % 3 == 0)
+            - current = []
+            - rows.push(current)
+          - count = count + 1
+          - current.push(notification)
+        .row
+          .span2.columns.padded-bottom
+            a.notification.btn.small.secondary(href='javascript:void(0);', onclick='page.setNotification(this)', id='notification-button-None') None
+        - each row in rows
+          .row
+            - each notification in row
+              .span2.columns.padded-bottom
+                a.notification.btn.small.secondary(href='javascript:void(0);', onclick='page.setNotification(this)', id='notification-button-' + notification)= notification
+      .modal-footer
+        a.btn.primary(href='#') Primary
+        a.btn.secondary(href='#') Secondary

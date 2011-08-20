@@ -4,8 +4,9 @@
  */
 
 var express = require('express');
-
+var fs = require('fs');
 var app = module.exports = express.createServer();
+var path = require('path');
 
 // Configuration
 
@@ -26,17 +27,29 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
-var renderPage = function(req, res, page) {
-  res.render(page, {
-    page: page,
-    secure: req.headers['x-forwarded-proto'] = 'https'
-  });
+var renderPage = function(req, res, page, templateArgs) {
+  
+  if (!templateArgs) {
+    templateArgs = {};
+  }
+  
+  templateArgs.page = page;
+  
+  res.render(page, templateArgs);
 }
 
 // Routes
 
 app.get('/', function(req, res){
-  renderPage(req, res, 'index');
+  var notificationFiles = fs.readdirSync(__dirname + '/public/notifications');
+  var notifications = []
+  for (var i in notificationFiles) {
+    var n = notificationFiles[i];
+    n = n.substring(0, n.indexOf('.'));
+    notifications.push(n);
+  }
+
+  renderPage(req, res, 'index', { notifications: notifications});
 });
 
 var listenPort = process.env.PORT == null ? 3000 : parseInt(process.env.PORT);

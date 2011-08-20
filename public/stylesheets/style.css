@@ -13,3 +13,11 @@ div.topbar li.hidden {
 .conversation-template {
     padding-bottom: 40px;
 }
+
+#contact-messages-internal {
+    min-height: 100px;
+}
+
+.padded-bottom {
+  padding-bottom: 6px;
+}

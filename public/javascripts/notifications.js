@@ -5,8 +5,11 @@ var notifications = new function() {
   this.showNotification = function(icon, title, message) {
     try {
       // play the sound notification
-      if ($.cookie('play-sound'))
-        $('#notification-sound')[0].play();
+      var sound = localStorage['play-sound'];
+      if (!sound)
+        sound = 'None';
+      if (sound != 'None')
+        $('#notification-' + sound)[0].play();
     }
     catch (e) {
       console.log(e);
