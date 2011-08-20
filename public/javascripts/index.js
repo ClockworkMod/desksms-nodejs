@@ -590,7 +590,7 @@ var page = new function() {
     $('#account-status').text(sprintf("%d days remaining", daysLeft));
     $('#account-status').show();
     if (daysLeft < 14 || page.sandbox) {
-      $('#buy-desksms').text(sprintf("%d days left. Extend now!", daysLeft));
+      $('#buy-desksms').text(sprintf("%d days left.", daysLeft));
       $('#buy-desksms').removeClass('hidden');
     }
   }
