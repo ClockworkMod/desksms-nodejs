@@ -145,5 +145,27 @@ iframe#push-iframe.hidden(src='push.html')
               .span2.columns.padded-bottom
                 a.notification.btn.small.secondary(href='javascript:void(0);', onclick='page.setNotification(this)', id='notification-button-' + notification)= notification
       .modal-footer
-        a.btn.primary(href='#') Primary
-        a.btn.secondary(href='#') Secondary
+        a.btn.primary(href='javascript:void(0)', onclick='page.closeDialog(this)') Done
+
+#buy-dialog.hidden.dialog-container
+  .ui-dialog(style='outline-width: 0px; outline-style: initial; outline-color: initial; height: auto; width: auto; top: 100px; left: 400px; display: block; z-index: 1001;')
+    #test-modal.modal(style='position: relative; top: auto; left: auto; margin: 0 auto; z-index: 1')
+      .modal-header
+        h3 Your purchase helps keep the DeskSMS servers running!
+        a.close(href='javascript:void(0)', onclick='page.closeDialog(this)') &times;
+      section.modal-body
+        center
+          .padded-bottom
+          #account-status.buy-desksms.padded-bottom
+          .padded-bottom
+          .padded-bottom
+            a(href='javascript:page.purchaseOnGoogleCheckout()')
+              img(src='images/google_checkout.png')
+          .padded-bottom
+          .padded-bottom or
+          .padded-bottom
+            a(href='javascript:page.purchaseOnMarket()')
+              img(src='images/android_market.png')
+          #buy-android You can buy a DeskSMS License from within the DeskSMS Android application, or check out <em>now</em> using your same Google Checkout account above!
+      .modal-footer
+        a.btn.primary(href='javascript:void(0)', onclick='page.closeDialog(this)') Done

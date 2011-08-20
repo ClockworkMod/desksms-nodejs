@@ -700,7 +700,7 @@ var page = new function() {
   }
   
   this.purchaseOnGoogleCheckout = function() {
-    $('#buy-dialog').dialog('close');
+    $('#buy-dialog').hide();
     var customPayload = { account: desksms.email };
 
     jsonp(sprintf('https://clockworkbilling.appspot.com/api/v1/order/koushd@gmail.com/desksms.subscription0?custom_payload=%s&buyer_id=%s&sandbox=%s', encodeURIComponent(JSON.stringify(customPayload)), desksms.buyerId, page.sandbox),
@@ -735,7 +735,7 @@ var page = new function() {
     $('#account-status').hide()
     $('#buy-checkout-complete').hide();
     $('#buy-android').hide();
-    $('#buy-dialog').dialog({ draggable: true, closeOnEscape: true, title: "Checkout Options:"});
+    $('#buy-dialog').show();
     $(':focus').blur();
     page.updateStatus();
   }
