@@ -53,6 +53,8 @@ app.get('/', function(req, res){
   renderPage(req, res, 'index', { notifications: notifications});
 });
 
+console.log(process.env);
+
 var listenPort = process.env.PORT == null ? 3000 : parseInt(process.env.PORT);
 app.listen(listenPort);
 console.log('Express app started on port ' + listenPort);
