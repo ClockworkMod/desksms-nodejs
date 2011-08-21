@@ -71,7 +71,8 @@ var googleContacts = new function() {
         localStorage['google-contacts'] = JSON.stringify(data);
         console.log('google contacts cached');
         loader(data, false);
-      })
+      },
+      "json")
       .error(function(err) {
         console.log(err);
         
