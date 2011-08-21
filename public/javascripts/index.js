@@ -310,6 +310,7 @@ var page = new function() {
     conversationUnreadElement.show();
 
     var contact = conversation.contact;
+    var cachedContact = page.getCachedContact(conversation);
     var displayName = conversation.number;
     var contactImage = $(conversationElement).find('.contact-image').attr('id', 'contact-image-' + conversation.id);
     var contactNameElement = $(conversationElement).find(".contact-name").attr('id', 'contact-name-' + conversation.id);
@@ -322,7 +323,7 @@ var page = new function() {
     }
     else {
       // try load from cache
-      conversation.contact = contact = page.getCachedContact(conversation);
+      conversation.contact = contact = cachedContact;
     }
 
     if (conversation.number == 'DeskSMS') {
@@ -330,9 +331,12 @@ var page = new function() {
     }
 
     if (contact) {
-      if (contact.photo) {
+      if (contact.photo && !contact.cached) {
         //contactImage.attr('src', contact.photo);
         page.loadContactPhoto(contactImage, conversation, contact);
+      }
+      else if (cachedContact) {
+        page.loadContactPhoto(contactImage, conversation, cachedContact);
       }
       displayName = contact.name;
       $(conversationElement).find('.contact-number').show();

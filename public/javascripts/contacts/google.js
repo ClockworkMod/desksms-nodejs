@@ -13,22 +13,7 @@ var googleContacts = new function() {
     var successfulGet = false;
 
     var haveToken = function() {
-      // on firefox, since we can't do reloads, gotta
-      // poll on this for success.
-      if (!successfulGet && extension == 'firefox')
-        setTimeout(haveToken, 5000);
-
-      var token = localStorage['google.access_token'];
-      
-      if (!token)
-        return;
-      
-      jsonp('https://www.google.com/m8/feeds/contacts/default/full?max-results=10000&alt=json', function(err, data) {
-        if (err) {
-          console.log(err);
-          return;
-        }
-
+      var loader = function(data, fromCache) {
         successfulGet = true;
 
         $.each(data.feed.entry, function(index, contact) {
@@ -50,17 +35,49 @@ var googleContacts = new function() {
             var number = phoneEntry['$t'];
             var name = contact.title['$t'];
             
-            var entry = { name: name, number: number, type: type };
-            if (photoLink) {
+            var entry = { name: name, number: number, type: type, cached: fromCache };
+            if (photoLink && !fromCache) {
               entry.photo = photoLink;
               //console.log(photoLink);
             }
             contacts.addContact(entry);
           });
         });
+      }
+
+      var cacheLoader = function() {
+        var cachedData = localStorage['google-contacts'];
+        if (cachedData) {
+          console.log('loading google contacts');
+          loader(JSON.parse(cachedData), true);
+          console.log('google contacts loaded');
+        }
+      }
+
+      // on firefox, since we can't do reloads, gotta
+      // poll on this for success.
+      if (!successfulGet && extension == 'firefox')
+        setTimeout(haveToken, 5000);
+
+      var token = localStorage['google.access_token'];
+
+      if (!token) {
+        cacheLoader();
+        return;
+      }
+
+      $.get('https://www.google.com/m8/feeds/contacts/default/full?max-results=10000&alt=json', {oauth_token: token}, function(data) {
+        console.log('caching google contacts');
+        localStorage['google-contacts'] = JSON.stringify(data);
+        console.log('google contacts cached');
+        loader(data, false);
+      })
+      .error(function(err) {
+        console.log(err);
         
-      },
-      {oauth_token: token});
+        cacheLoader();
+        return;
+      });
     }
 
     var query = $.query.load(window.location.hash);
