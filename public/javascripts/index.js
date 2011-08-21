@@ -449,6 +449,9 @@ var page = new function() {
 
   $(document).ready(function() {
     (function() {
+      var loginButton = $('#desksms-login');
+      loginButton.attr('href', desksms.getLoginUrl());
+
       var input = $('#contact-search');
       input.keypress(function(event) {
         if (event.which != 13)
@@ -511,44 +514,39 @@ var page = new function() {
     // figure out who we are and if we're registered
     var whoamiLooper = function() {
       desksms.whoami(function(err, data) {
-        var loginButton = $('#desksms-login');
-        if (loginButton) {
-          if (err || !data.email) {
-            loginButton.attr('href', desksms.getLoginUrl());
-            if (extension == 'firefox')
-              setTimeout(whoamiLooper, 30000);
-            return;
-          }
+        if (err || !data.email) {
+          if (extension == 'firefox')
+            setTimeout(whoamiLooper, 30000);
+          return;
+        }
 
-          loginButton.attr('href', desksms.getLogoutUrl());
-          loginButton.text("Logout");
+        var logoutButton = $('#desksms-logout');
+        logoutButton.attr('href', desksms.getLogoutUrl());
 
-          $('.login-hide').hide();
-          $('.login-show').show();
-          if (!data.registration_id) {
-            $('#content-status-not-registered').show();
-            if (extension == 'firefox')
-              setTimeout(whoamiLooper, 30000);
-            return;
-          }
-          //$('#content-status').show();
-          
-          page.refreshInbox(true);
-          
-          page.updateExpiration(data.subscription_expiration);
+        $('.login-hide').hide();
+        $('.login-show').show();
+        if (!data.registration_id) {
+          $('#content-status-not-registered').show();
+          if (extension == 'firefox')
+            setTimeout(whoamiLooper, 30000);
+          return;
+        }
 
-          var startPush = function() {
-            if ($('#push-iframe')[0].contentWindow.startPush) {
-              $('#push-iframe')[0].contentWindow.startPush(desksms.buyerId, function(err, data) {
-                page.refreshInbox();
-              });
-            }
+        page.refreshInbox(true);
+
+        page.updateExpiration(data.subscription_expiration);
+
+        var startPush = function() {
+          if ($('#push-iframe')[0].contentWindow.startPush) {
+            $('#push-iframe')[0].contentWindow.startPush(desksms.buyerId, function(err, data) {
+              page.refreshInbox();
+            });
           }
-          $('#push-iframe')[0].contentWindow.onPushReady = function() {
-            startPush();
-          }
+        }
+        $('#push-iframe')[0].contentWindow.onPushReady = function() {
           startPush();
         }
+        startPush();
       });
     };
     whoamiLooper();
