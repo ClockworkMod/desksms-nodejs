@@ -72,8 +72,13 @@
           deleteAllCookies();
 
 .container
-  - each notification in notifications
-    - var notificationId = 'notification-' + stripExtension(notification);
+  - each notification in oggs
+    - var notificationId = 'notification-' + notification.replace('.', '-');
+    audio.hidden(id=notificationId)
+      source(src='notifications/' + notification)
+
+  - each notification in wavs
+    - var notificationId = 'notification-' + notification.replace('.', '-');
     audio.hidden(id=notificationId)
       source(src='notifications/' + notification)
 
@@ -145,25 +150,28 @@ iframe#push-iframe.hidden(src='push.html')
         h3 Notification Settings
         a.close(href='javascript:void(0)', onclick='page.closeDialog(this)') &times;
       section.modal-body
-        - var count = 0
-        - var current = null
-        - var rows = []
-        - each notification in notifications
-          - if (count % 4 == 0)
-            - current = []
-            - rows.push(current)
-          - count = count + 1
-          - current.push(notification)
         .row
           .span2.columns.padded-bottom
             a.notification.btn.small.secondary(href='javascript:void(0);', onclick='page.setNotification(this)', id='notification-button-None') None
-        - each row in rows
-          .row
-            - each notification in row
-              .span2.columns.padded-bottom
-                - var notificationId = stripExtension(notification)
-                - var ext = extname(notification).substring(1)
-                a.notification.btn.small.secondary(class='notification-type-' + ext, href='javascript:void(0);', onclick='page.setNotification(this)', id='notification-button-' + notificationId)= notificationId
+        - each pair in [['ogg', oggs], ['wav', wavs]]
+          - var notifications = pair[1]
+          - var notificationType = pair[0]
+          - var count = 0
+          - var current = null
+          - var rows = []
+          - each notification in notifications
+            - if (count % 4 == 0)
+              - current = []
+              - rows.push(current)
+            - count = count + 1
+            - current.push(notification)
+          div(class='notification-type-' + notificationType)
+            - each row in rows
+              .row
+                - each notification in row
+                  .span2.columns.padded-bottom
+                    - var notificationId = notification.replace('.', '-')
+                    a.notification.btn.small.secondary(href='javascript:void(0);', onclick='page.setNotification(this)', id='notification-button-' + notificationId)= stripExtension(notification)
       .modal-footer
         a.btn.primary(href='javascript:void(0)', onclick='page.closeDialog(this)') Done
 

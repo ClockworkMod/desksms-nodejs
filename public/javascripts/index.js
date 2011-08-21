@@ -592,6 +592,7 @@ var page = new function() {
     $('#account-status').text(sprintf("%d days remaining", daysLeft));
     $('#account-status').show();
     if (daysLeft < 14 || page.sandbox) {
+      daysLeft = Math.max(daysLeft, 0);
       $('#buy-desksms').text(sprintf("%d days left.", daysLeft));
       $('#buy-desksms').removeClass('hidden');
     }
@@ -812,7 +813,8 @@ var page = new function() {
   
   this.setNotification = function(element) {
     element = $(element);
-    var sound = element.text();
+    var sound = element.attr('id');
+    sound = sound.substring("notification-button-".length);
     localStorage['play-sound'] = sound;
     if (sound != 'None') {
       $('#notification-' + sound)[0].volume = .3;

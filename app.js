@@ -47,18 +47,21 @@ var renderPage = function(req, res, page, templateArgs) {
 app.get('/', function(req, res){
   res.header('Cache-Control', 'max-age=600')
   var notificationFiles = fs.readdirSync(__dirname + '/public/notifications');
-  var notifications = [];
   var stripExtension = function(filename) {
     return filename.substring(0, filename.indexOf('.'));
   }
-  console.log(notificationFiles);
+  var oggs = [];
+  var wavs = [];
   for (var i in notificationFiles) {
     var n = notificationFiles[i];
-    //n = stripExtension(n);
-    notifications.push(n);
+    var ext = path.extname(n);
+    if (ext == '.ogg')
+      oggs.push(n);
+    else
+      wavs.push(n);
   }
 
-  renderPage(req, res, 'index', { notifications: notifications, stripExtension: stripExtension, extname: path.extname});
+  renderPage(req, res, 'index', { oggs: oggs, wavs: wavs, stripExtension: stripExtension, extname: path.extname});
 });
 
 var listenPort = process.env.PORT == null ? 3000 : parseInt(process.env.PORT);
