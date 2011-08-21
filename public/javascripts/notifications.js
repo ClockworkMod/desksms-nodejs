@@ -56,7 +56,7 @@ var notifications = new function() {
     query = $.query.load(window.location.hash);
     extension = query.get('extension');
 
-    if (!window.webkitNotifications) {
+    if (!window.webkitNotifications || extension) {
       $('#enable-chrome-notifications').remove();
       return;
     }
