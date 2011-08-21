@@ -806,8 +806,10 @@ var page = new function() {
     element = $(element);
     var sound = element.text();
     localStorage['play-sound'] = sound;
-    if (sound != 'None')
+    if (sound != 'None') {
+      $('#notification-' + sound)[0].volume = .3;
       $('#notification-' + sound)[0].play();
+    }
     $('.notification').removeClass('primary').addClass('secondary');
     element.removeClass('secondary').addClass('primary');
   }

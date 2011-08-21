@@ -8,8 +8,10 @@ var notifications = new function() {
       var sound = localStorage['play-sound'];
       if (!sound)
         sound = 'None';
-      if (sound != 'None')
+      if (sound != 'None') {
+        $('#notification-' + sound)[0].volume = .3;
         $('#notification-' + sound)[0].play();
+      }
     }
     catch (e) {
       console.log(e);
