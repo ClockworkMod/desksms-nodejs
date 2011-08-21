@@ -24,6 +24,8 @@
             li
               a(href='javascript:page.showNotificationSettings()') Notification
             li
+              a(href='javascript:page.showDeliveryOptions()') SMS Delivery
+            li
               a.connect-google.link(href='javascript:void(0)') Sync Contacts
             li.divider
             li
@@ -184,3 +186,20 @@ iframe#push-iframe.hidden(src='push.html')
           #buy-android You can buy a DeskSMS License from within the DeskSMS Android application, or check out <em>now</em> using your same Google Checkout account above!
       .modal-footer
         a.btn.primary(href='javascript:void(0)', onclick='page.closeDialog(this)') Done
+
+#delivery-options-dialog.hidden.dialog-container
+  .ui-dialog(style='outline-width: 0px; outline-style: initial; outline-color: initial; height: auto; width: auto; top: 100px; left: 400px; display: block; z-index: 1001;')
+    #test-modal.modal(style='position: relative; top: auto; left: auto; margin: 0 auto; z-index: 1')
+      .modal-header
+        h3 SMS Delivery Options
+        a.close(href='javascript:void(0)', onclick='page.closeDialog(this)') &times;
+      section.modal-body
+        center
+          .padded-bottom
+            a#setting-forward_email.setting.btn.small.secondary(href='javascript:void(0);', onclick='page.toggleSetting(this)') GMail
+          .padded-bottom
+            a#setting-forward_xmpp.setting.btn.small.secondary(href='javascript:void(0);', onclick='page.toggleSetting(this)') Google Talk
+          .padded-bottom
+            a#setting-forward_web.setting.btn.small.secondary(href='javascript:void(0);', onclick='page.toggleSetting(this)') Web Interface
+      .modal-footer
+        a.btn.primary(href='javascript:void(0)', onclick='page.updateDeliveryOptions(this)') Save

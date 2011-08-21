@@ -774,13 +774,34 @@ var page = new function() {
     $(e).parents('.dialog-container').hide();
   }
   
+  var settings = { forward_xmpp: true, forward_web: true, forward_email: true, tickle: true };
+  this.showDeliveryOptions = function() {
+    $('#delivery-options-dialog').show();
+    $('.setting').addClass('primary').removeClass('secondary');
+    desksms.getSettings(function(err, data) {
+      if (err)
+        return;
+      $.each(data, function(key, value) {
+        settings[key] = value;
+        if (!value)
+          $('#setting-' + key).removeClass('primary').addClass('secondary');
+      });
+    });
+  }
+
+  this.updateDeliveryOptions = function(element) {
+    desksms.updateSettings(settings, function(err, data) {
+      console.log(data);
+    });
+    page.closeDialog(element);
+  }
+
   this.showNotificationSettings = function() {
     var sound = localStorage['play-sound'];
     if (!sound)
       sound = 'None';
     $('#notification-button-' + sound).removeClass('secondary').addClass('primary');
     $('#notification-settings').show();
-    
   }
   
   this.setNotification = function(element) {
@@ -791,5 +812,16 @@ var page = new function() {
       $('#notification-' + sound)[0].play();
     $('.notification').removeClass('primary').addClass('secondary');
     element.removeClass('secondary').addClass('primary');
+  }
+
+  this.toggleSetting = function(element) {
+    element = $(element);
+    var id = element.attr('id');
+    id = id.substring(id.indexOf('-') + 1);
+    settings[id] = !settings[id];
+    if (settings[id])
+      $('#setting-' + id).removeClass('secondary').addClass('primary');
+    else
+      $('#setting-' + id).removeClass('primary').addClass('secondary');
   }
 }

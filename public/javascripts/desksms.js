@@ -37,6 +37,14 @@ var desksms = new function() {
 
   this.conversations = {};
 
+  this.getSettings = function(cb) {
+    jsonp(this.SETTINGS_URL, cb);
+  }
+
+  this.updateSettings = function(settings, cb) {
+    jsonp(this.SETTINGS_URL, cb, settings);
+  }
+
   this.getCrossOriginImage = function(image) {
     return sprintf(this.PROXY_URL, encodeURIComponent(image))
   }
