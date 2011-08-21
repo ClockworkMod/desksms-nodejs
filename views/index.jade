@@ -73,8 +73,9 @@
 
 .container
   - each notification in notifications
-    audio.hidden(id='notification-' + notification)
-      source(src='notifications/' + notification + '.ogg')
+    - var notificationId = 'notification-' + stripExtension(notification);
+    audio.hidden(id=notificationId)
+      source(src='notifications/' + notification)
 
   .container(style='padding-top: 60px')
 
@@ -148,7 +149,7 @@ iframe#push-iframe.hidden(src='push.html')
         - var current = null
         - var rows = []
         - each notification in notifications
-          - if (count % 3 == 0)
+          - if (count % 4 == 0)
             - current = []
             - rows.push(current)
           - count = count + 1
@@ -160,7 +161,9 @@ iframe#push-iframe.hidden(src='push.html')
           .row
             - each notification in row
               .span2.columns.padded-bottom
-                a.notification.btn.small.secondary(href='javascript:void(0);', onclick='page.setNotification(this)', id='notification-button-' + notification)= notification
+                - var notificationId = stripExtension(notification)
+                - var ext = extname(notification).substring(1)
+                a.notification.btn.small.secondary(class='notification-type-' + ext, href='javascript:void(0);', onclick='page.setNotification(this)', id='notification-button-' + notificationId)= notificationId
       .modal-footer
         a.btn.primary(href='javascript:void(0)', onclick='page.closeDialog(this)') Done
 

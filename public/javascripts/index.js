@@ -798,6 +798,14 @@ var page = new function() {
     var sound = localStorage['play-sound'];
     if (!sound)
       sound = 'None';
+    if (navigator.userAgent.indexOf('Chrome') != -1 || navigator.userAgent.indexOf('Firefox') != -1) {
+      $('.notification-type-ogg').show();
+      $('.notification-type-wav').hide();
+    }
+    else {
+      $('.notification-type-ogg').hide();
+      $('.notification-type-wav').show();
+    }
     $('#notification-button-' + sound).removeClass('secondary').addClass('primary');
     $('#notification-settings').show();
   }
