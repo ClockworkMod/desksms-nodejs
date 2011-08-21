@@ -327,7 +327,7 @@ var page = new function() {
     }
 
     if (conversation.number == 'DeskSMS') {
-      contactImage.attr('src', 'images/desksms-small.png');
+      contactImage.attr('src', 'images/clockworkmod.png');
     }
 
     if (contact) {

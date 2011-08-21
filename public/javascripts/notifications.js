@@ -39,7 +39,7 @@ var notifications = new function() {
   }
   
   this.showMessageNotification = function(message) {
-    var icon = 'images/contact.png';
+    var icon = 'images/desksms-small.png';
     var displayName = message.number;
     var contact = message.conversation.contact;
     if (contact) {
