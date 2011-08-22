@@ -321,10 +321,10 @@ var page = new function() {
 
     var contact = conversation.contact;
     var cachedContact = page.getCachedContact(conversation);
-    var displayName = conversation.number;
     var contactImage = $(conversationElement).find('.contact-image').attr('id', 'contact-image-' + conversation.id);
     var contactNameElement = $(conversationElement).find(".contact-name").attr('id', 'contact-name-' + conversation.id);
     if (contact) {
+      console.log('fresh contact found for ' + conversation.number);
       // save to cache if necessary
       if (!contact.cached) {
         contact.cached = true;
@@ -333,28 +333,34 @@ var page = new function() {
     }
     else {
       // try load from cache
+      console.log('using cached contact for ' + conversation.number);
       conversation.contact = contact = cachedContact;
+    }
+    if (contact) {
+      contactNameElement.text(contact.name);
+      $(conversationElement).find('.contact-number').show();
+    }
+    else {
+      contactNameElement.text(conversation.number);
+      $(conversationElement).find('.contact-number').hide();
     }
 
     if (conversation.number == 'DeskSMS') {
       contactImage.attr('src', 'images/clockworkmod.png');
     }
 
-    if (contact) {
-      if (contact.photo && !contact.cached) {
-        //contactImage.attr('src', contact.photo);
-        page.loadContactPhoto(contactImage, conversation, contact);
-      }
-      else if (cachedContact) {
-        page.loadContactPhoto(contactImage, conversation, cachedContact);
-      }
-      displayName = contact.name;
-      $(conversationElement).find('.contact-number').show();
+    // if we have a contact available, try to find a valid photo url
+    if (contact && contact.photo) {
+      console.log('using fresh contact photo for ' + conversation.number);
+      page.loadContactPhoto(contactImage, conversation, contact);
+    }
+    else if (cachedContact && cachedContact.photo) {
+      console.log('using cached base64 contact photo for ' + conversation.number);
+      page.loadContactPhoto(contactImage, conversation, cachedContact);
     }
     else {
-      $(conversationElement).find('.contact-number').hide();
+      console.log('no contact photo available for ' + conversation.number);
     }
-    contactNameElement.text(displayName);
 
     return conversationElement;
   }
@@ -651,7 +657,7 @@ var page = new function() {
         return null;
       ret.fromCache = true;
       this.cachedContacts[key] = ret;
-      console.log('using cached contact');
+      console.log('loading cached contact for ' + conversation.number);
       return ret;
     }
     catch(e) {
