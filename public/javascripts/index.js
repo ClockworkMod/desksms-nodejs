@@ -77,7 +77,9 @@ var page = new function() {
 
       hidden.show();
       var input = hidden.find('.contact-text-content');
-      input.focus();
+      setTimeout(function() {
+        input.focus();
+      }, 200);
 
       //input.val('');
       input.unbind('blur');
@@ -114,6 +116,14 @@ var page = new function() {
           if (err) {
             console.log(err);
             return;
+          }
+          if (data.error) {
+            $('#push-error-text').text(data.error);
+            var pushErrorAlert = $('#push-error-alert');
+            pushErrorAlert.show();
+            pushErrorAlert.fadeOut(10000, function() {
+              pushErrorAlert.hide();
+            });
           }
           var date = data.data[0];
           var conversation = desksms.findConversation(number);
