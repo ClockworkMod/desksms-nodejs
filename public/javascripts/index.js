@@ -583,7 +583,7 @@ var page = new function() {
   var successfullyRetrievedContact = false;
   contacts.onNewContact(function(contact) {
     if (!successfullyRetrievedContact) {
-      $('#connect-google').hide();
+      //$('#connect-google').hide();
       successfullyRetrievedContact = true;
     }
     var conversation = desksms.findConversation(contact.number);
@@ -853,5 +853,9 @@ var page = new function() {
       $('#setting-' + id).removeClass('secondary').addClass('primary');
     else
       $('#setting-' + id).removeClass('primary').addClass('secondary');
+  }
+  
+  this.forceSync = function() {
+    desksms.tickle('outbox');
   }
 }

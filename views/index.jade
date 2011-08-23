@@ -2,7 +2,7 @@
   .topbar
     .container.fixed
       .row
-        .span9.columns.offset1
+        .span10.columns.offset1
           h3
             a#desksms-header.link.logo(href='https://market.android.com/details?id=com.koushikdutta.desktopsms') DeskSMS
           ul
@@ -10,13 +10,11 @@
               a#desksms-login.login-hide.link(href='javascript:void(0)') Login
             li
               a#connect-google.connect-google.link(href='javascript:void(0)') Sync Contacts
-            li#enable-chrome-notifications
-              a(href='javascript:notifications.requestPermissions()') Enable Notifications
             li
               a#buy-desksms.buy-desksms.hidden(href='javascript:page.purchase()')
 
           form(action='javascript:void(0)')
-            input#contact-search(type='text', placeholder='Enter Contact Name or Number')
+            input#contact-search(style='width: 170px;', type='text', placeholder='Enter Name or Number')
 
           ul.nav
             li.menu
@@ -29,9 +27,12 @@
                   a(href='javascript:page.showDeliveryOptions()') SMS Delivery
                 li
                   a.connect-google.link(href='javascript:void(0)') Sync Contacts
+                li#enable-chrome-notifications
+                  a(href='javascript:notifications.requestPermissions()') Chrome Notifications
                 li.divider
                 li
                   a(href='javascript:page.pong()') Test Connection
+                  a(href='javascript:page.forceSync()') Force Sync
                 li.divider
                 li.login-show.hidden
                   a#desksms-logout.login-show.link(href='javascript:void(0)') Logout

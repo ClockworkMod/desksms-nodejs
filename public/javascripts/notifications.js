@@ -65,13 +65,13 @@ var notifications = new function() {
 
     if (window.webkitNotifications && !extension) {
       if (webkitNotifications.checkPermission() == 0)
-        $('#enable-chrome-notifications').hide();
+        $('#enable-chrome-notifications').remove();
     }
   });
   
   this.requestPermissions = function() {
     webkitNotifications.requestPermission(function() {
-      $('.enable-chrome-notifications').hide();
+      $('#enable-chrome-notifications').remove();
     });
   }
 }
