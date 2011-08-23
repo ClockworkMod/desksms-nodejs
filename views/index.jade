@@ -1,75 +1,77 @@
 .topbar-wrapper(style="z-index: 5;")
   .topbar
     .container.fixed
-      h3
-        a#desksms-header.link.logo(href='https://market.android.com/details?id=com.koushikdutta.desktopsms') DeskSMS
-      ul
-        li
-          a#desksms-login.login-hide.link(href='javascript:void(0)') Login
-        li
-          a#connect-google.connect-google.link(href='javascript:void(0)') Sync Contacts
-        li#enable-chrome-notifications
-          a(href='javascript:notifications.requestPermissions()') Enable Notifications
-        li
-          a#buy-desksms.buy-desksms.hidden(href='javascript:page.purchase()')
-
-      form(action='javascript:void(0)')
-        input#contact-search(type='text', placeholder='Enter Contact Name or Number')
-
-      ul.nav
-        li.menu
-          a.menu(href='#')
-            img(src='images/options.png')
-          ul.menu-dropdown
+      .row
+        .span9.columns.offset1
+          h3
+            a#desksms-header.link.logo(href='https://market.android.com/details?id=com.koushikdutta.desktopsms') DeskSMS
+          ul
             li
-              a(href='javascript:page.showNotificationSettings()') Notification
+              a#desksms-login.login-hide.link(href='javascript:void(0)') Login
             li
-              a(href='javascript:page.showDeliveryOptions()') SMS Delivery
+              a#connect-google.connect-google.link(href='javascript:void(0)') Sync Contacts
+            li#enable-chrome-notifications
+              a(href='javascript:notifications.requestPermissions()') Enable Notifications
             li
-              a.connect-google.link(href='javascript:void(0)') Sync Contacts
-            li.divider
-            li
-              a(href='javascript:page.pong()') Test Connection
-            li.divider
-            li.login-show.hidden
-              a#desksms-logout.login-show.link(href='javascript:void(0)') Logout
-      script
-        $(document).ready(function(){
-          $("body").bind("click", function(e) {
-              $("ul.menu-dropdown").hide();
-              $('a.menu').parent("li").removeClass("open").children("ul.menu-dropdown").hide();
-            });
+              a#buy-desksms.buy-desksms.hidden(href='javascript:page.purchase()')
 
-          $("a.menu").click(function(e) {
-             var $target = $(this);
-             var $parent = $target.parent("li");
-             var $siblings = $target.siblings("ul.menu-dropdown");
-             var $parentSiblings = $parent.siblings("li");
-             if ($parent.hasClass("open")) {
-               $parent.removeClass("open");
-               $siblings.hide();
-             } else {
-               $parent.addClass("open");
-               $siblings.show();
-             }
-             $parentSiblings.children("ul.menu-dropdown").hide();
-             $parentSiblings.removeClass("open");
-             return false;
-           });
-          });
+          form(action='javascript:void(0)')
+            input#contact-search(type='text', placeholder='Enter Contact Name or Number')
 
-          // clear all cookiess, this is all done with static content.
-          function deleteAllCookies() {
-              var cookies = document.cookie.split(";");
+          ul.nav
+            li.menu
+              a.menu(href='#')
+                img(src='images/options.png')
+              ul.menu-dropdown
+                li
+                  a(href='javascript:page.showNotificationSettings()') Notification
+                li
+                  a(href='javascript:page.showDeliveryOptions()') SMS Delivery
+                li
+                  a.connect-google.link(href='javascript:void(0)') Sync Contacts
+                li.divider
+                li
+                  a(href='javascript:page.pong()') Test Connection
+                li.divider
+                li.login-show.hidden
+                  a#desksms-logout.login-show.link(href='javascript:void(0)') Logout
+          script
+            $(document).ready(function(){
+              $("body").bind("click", function(e) {
+                  $("ul.menu-dropdown").hide();
+                  $('a.menu').parent("li").removeClass("open").children("ul.menu-dropdown").hide();
+                });
 
-              for (var i = 0; i < cookies.length; i++) {
-                  var cookie = cookies[i];
-                  var eqPos = cookie.indexOf("=");
-                  var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-                  document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+              $("a.menu").click(function(e) {
+                 var $target = $(this);
+                 var $parent = $target.parent("li");
+                 var $siblings = $target.siblings("ul.menu-dropdown");
+                 var $parentSiblings = $parent.siblings("li");
+                 if ($parent.hasClass("open")) {
+                   $parent.removeClass("open");
+                   $siblings.hide();
+                 } else {
+                   $parent.addClass("open");
+                   $siblings.show();
+                 }
+                 $parentSiblings.children("ul.menu-dropdown").hide();
+                 $parentSiblings.removeClass("open");
+                 return false;
+               });
+              });
+
+              // clear all cookiess, this is all done with static content.
+              function deleteAllCookies() {
+                  var cookies = document.cookie.split(";");
+
+                  for (var i = 0; i < cookies.length; i++) {
+                      var cookie = cookies[i];
+                      var eqPos = cookie.indexOf("=");
+                      var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                  }
               }
-          }
-          deleteAllCookies();
+              deleteAllCookies();
 
 .container
   - each notification in oggs
