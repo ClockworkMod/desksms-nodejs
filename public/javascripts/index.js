@@ -786,7 +786,7 @@ var page = new function() {
   }
   
   this.closeDialog = function(e) {
-    $(e).parents('.dialog-container').hide();
+    $(e).parents('.dialog-container').hide("scale", {}, 200);
   }
   
   var settings = { forward_xmpp: true, forward_web: true, forward_email: true, tickle: true };
