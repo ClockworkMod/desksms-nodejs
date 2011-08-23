@@ -34,3 +34,7 @@ div.topbar a.hidden {
     padding: 6px;
     font-weight: bold;
 }
+
+div.topbar ul.left-nav li ul {
+    right: 0;
+}
