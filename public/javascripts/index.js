@@ -801,6 +801,10 @@ var page = new function() {
         if (!value)
           $('#setting-' + key).removeClass('primary').addClass('secondary');
       });
+      // push these settings to the phone to force the sync
+      desksms.updateSettings(settings, function(err, data) {
+        console.log(data);
+      });
     });
   }
 
