@@ -7,6 +7,7 @@ var express = require('express');
 var fs = require('fs');
 var app = module.exports = express.createServer();
 var path = require('path');
+var url = require('url');
 
 // Configuration
 
@@ -18,7 +19,10 @@ app.configure(function(){
   app.use(app.router);
   var staticHandler = express.static(__dirname + '/public');
   app.use(function(req, res) {
-    res.header('Cache-Control', 'max-age=600')
+    if (req.url.indexOf('/notifications/') == 0)
+      res.header('Cache-Control', 'max-age=1209600')
+    else
+      res.header('Cache-Control', 'max-age=600')
     staticHandler(req, res);
   });
 });
