@@ -583,7 +583,7 @@ var page = new function() {
   var successfullyRetrievedContact = false;
   contacts.onNewContact(function(contact) {
     if (!successfullyRetrievedContact) {
-      //$('#connect-google').hide();
+      $('#connect-google').hide();
       successfullyRetrievedContact = true;
     }
     var conversation = desksms.findConversation(contact.number);
