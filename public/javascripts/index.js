@@ -197,6 +197,9 @@ var page = new function() {
     if (contact) {
       displayName = contact.name; 
     }
+    else if (conversation.name) {
+      displayName = conversation.name;
+    }
     else {
       displayName = conversation.number;
     }
@@ -338,6 +341,10 @@ var page = new function() {
     }
     if (contact) {
       contactNameElement.text(contact.name);
+      $(conversationElement).find('.contact-number').show();
+    }
+    else if (conversation.name) {
+      contactNameElement.text(conversation.name);
       $(conversationElement).find('.contact-number').show();
     }
     else {

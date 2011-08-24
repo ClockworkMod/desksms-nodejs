@@ -110,6 +110,8 @@ var desksms = new function() {
         var conversation = desksms.startConversation(message.number);
         if (message.type == 'incoming')
           conversation.read = false;
+        if (message.name)
+          conversation.name = message.name;
         conversation.addMessage(message);
       });
     }
