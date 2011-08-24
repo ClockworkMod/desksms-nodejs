@@ -206,29 +206,24 @@ var page = new function() {
     return displayName;
   }
   
-  this.addMessageToConversation = function(message, afterMessage, displayName, messageContainer, messageTemplate, messageElement) {
+  this.addMessageToConversation = function(message) {
     var conversation = message.conversation;
-    if (messageElement == null) {
-      messageElement = $('#message-' + message.id);
-    }
+    var messageElement = $('#message-' + message.id);
     
     var needsInsert = false;
     if (messageElement == null || messageElement.length == 0) {
       needsInsert = true;
-      if (messageTemplate == null)
-        messageTemplate = $('#contact-message-template');
+      var messageTemplate = $('#contact-message-template');
 
-        messageElement = messageTemplate.clone();
-        messageElement.attr('id', 'message-' + message.id);
-        messageElement.removeClass("hidden");
+      messageElement = messageTemplate.clone();
+      messageElement.attr('id', 'message-' + message.id);
+      messageElement.removeClass("hidden");
     }
     
     var date = new Date(message.date);
     messageElement.removeClass("hidden");
     var from = $(messageElement).find(".message-from");
-    var displayName = message.number;
-    if (message.conversation.contact)
-      displayName = message.conversation.contact.name;
+    var displayName = page.getDisplayName(conversation);
     if (message.type == 'incoming') {
       from.addClass('message-from-' + conversation.id);
       from.text(displayName);
@@ -250,28 +245,20 @@ var page = new function() {
     $(messageElement).find(".message-date").text(dateFormat(new Date(message.date), "shortTime"));
     
     if (needsInsert) {
-      if (messageContainer == null)
-        messageContainer = $('#conversation-' + conversation.id).find('#contact-messages-internal');
+        var messageContainer = $('#conversation-' + conversation.id).find('#contact-messages-internal');
         if (messageContainer == null || messageContainer.length == 0) {
           console.log('conversation not found.');
           return;
         }
       
-      if (afterMessage == null)
-        $(messageElement).insertBefore(messageContainer.find('#last-message'));
-//        messageContainer.append(messageElement);
-      else
-        $(messageElement).insertAfter('#message-' + afterMessage.id);
+      $(messageElement).insertBefore(messageContainer.find('#last-message'));
     }
   }
   
-  this.addConversationToTop = function(conversation, existing) {
+  this.addConversationToTop = function(conversation) {
     if (conversation == null)
       return;
-    var conversationElement = existing;
-    if (conversationElement == null) {
-      conversationElement = $('#conversation-' + conversation.id);
-    }
+    var conversationElement = $('#conversation-' + conversation.id);
     
     var conversationTemplate = $('#conversation-template');
     if (conversationElement == null || conversationElement.length == 0) {
