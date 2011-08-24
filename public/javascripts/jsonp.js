@@ -1,10 +1,9 @@
 var jsonp = function(url, cb, data) {
   var type = "jsonp";
 
-  if (url.indexOf("https://desksms.appspot.com") == 0 || url.indexOf("http://desksms.appspot.com") == 0)
-    type = "json";
+  var thisDomain = window.location.protocol + '//' + window.location.host;
 
-  if (url.indexOf("https://2.desksms.appspot.com") == 0 || url.indexOf("http://2.desksms.appspot.com") == 0)
+  if (url.indexOf(thisDomain) == 0)
     type = "json";
 
   var jqXHR = $.get(url, data, function(data) {
