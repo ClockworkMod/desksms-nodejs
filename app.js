@@ -20,7 +20,7 @@ app.configure(function(){
   var staticHandler = express.static(__dirname + '/public');
 
   app.use(function(req, res, next) {
-    if (req.url.indexOf('/notifications/') == 0)
+    if (req.url.indexOf('/notifications/') == 0 || req.url.indexOf('/images/') == 0)
       res.header('Cache-Control', 'max-age=1209600')
     else
       res.header('Cache-Control', 'max-age=600')
