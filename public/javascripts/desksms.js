@@ -34,12 +34,12 @@ var desksms = new function() {
   this.IMAGE_URL = this.USER_URL + "/image";
   this.PONG_URL = this.USER_URL + "/pong";
   this.DELETE_CONVERSATION_URL = this.USER_URL + "/delete/conversation";
-  this.TICKL_URL = this.USER_URL + "/tickle";
+  this.TICKLE_URL = this.USER_URL + "/tickle";
 
   this.conversations = {};
   
   this.tickle = function(type, cb) {
-    jsonp(this.TICKL_URL, cb, { type: type });
+    jsonp(this.TICKLE_URL, cb, { type: type });
   }
 
   this.getSettings = function(cb) {

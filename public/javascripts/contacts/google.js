@@ -83,7 +83,7 @@ var googleContacts = new function() {
 
     var query = $.query.load(window.location.hash);
     var access_token = query.get('access_token');
-    if (access_token) {
+    if (access_token && query.get('token_type') == 'Bearer') {
       localStorage['google.access_token'] = access_token;
       window.location.hash = '';
     }

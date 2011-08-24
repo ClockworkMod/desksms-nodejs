@@ -569,6 +569,7 @@ var page = new function() {
       $('.content-container').css('width', '95%');
     }
     $('.connect-google').attr('href', googleContacts.getAuthorizationUrl());
+    $('.connect-facebook').attr('href', facebookContacts.getAuthorizationUrl());
     
     page.setClickHandlers();
   });
@@ -607,9 +608,20 @@ var page = new function() {
     }
   }
   
-  this.loadContactPhoto = function(photoElement, conversation, contact) {
+  this.loadContactPhoto = function(photoElement, conversation, contact, skipFacebook) {
     // if we don't have local cache, or this contact is from cache
     // just use the explicit url
+    if (!skipFacebook) {
+      var facebookPhoto = facebookContacts.getContactPhoto(contact);
+      if (facebookPhoto) {
+        photoElement.attr('src', facebookPhoto);
+        photoElement.error(function() {
+          page.loadContactPhoto(photoElement, conversation, contact, true);
+        });
+        return;
+      }
+    }
+
     if (!window.localStorage || contact.fromCache) {
       photoElement.attr('src', contact.photo);
     }
