@@ -18,12 +18,13 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(app.router);
   var staticHandler = express.static(__dirname + '/public');
-  app.use(function(req, res) {
+
+  app.use(function(req, res, next) {
     if (req.url.indexOf('/notifications/') == 0)
       res.header('Cache-Control', 'max-age=1209600')
     else
       res.header('Cache-Control', 'max-age=600')
-    staticHandler(req, res);
+    staticHandler(req, res, next);
   });
 });
 
