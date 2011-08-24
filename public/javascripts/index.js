@@ -111,7 +111,6 @@ var page = new function() {
         var conversationId = conversationElement.find('#conversation-id').text();
         var conversation = desksms.conversations[conversationId];
         var number = conversation.number;
-        _gaq.push(['_trackEvent', 'Send', desksms.email]);
         desksms.sendSms(number, contents, function(err, data) {
           if (err) {
             console.log(err);
