@@ -86,7 +86,9 @@ var googleContacts = new function() {
     var access_token = query.get('access_token');
     if (access_token && query.get('token_type') == 'Bearer') {
       localStorage['google.access_token'] = access_token;
-      window.location.hash = '';
+      // changing the hash in ie seems to trigger a new document.ready...
+      if (!$.browser.msie)
+        window.location.hash = '';
     }
 
     haveToken();

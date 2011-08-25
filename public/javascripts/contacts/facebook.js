@@ -65,13 +65,14 @@ var facebookContacts = new function() {
     var access_token = query.get('access_token');
     if (access_token && query.get('token_type') == 'facebook') {
       localStorage['facebook.access_token'] = access_token;
-      window.location.hash = '';
 
       jsonp(sprintf('https://graph.facebook.com/me/friends?fields=id,name,picture&access_token=%s', access_token), function(err, data) {
         if (err)
           return;
         facebookContacts.facebookData = data;
         localStorage['facebook.facebook_data'] = JSON.stringify(data);
+        // force a reload to get all the pics to reload
+        window.location.hash = '';
         window.location.reload();
       });
     }

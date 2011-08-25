@@ -70,13 +70,24 @@ var page = new function() {
     var clickHandler = function(event) {
       var conversationElement = $(event.target).parents('.conversation-template');
       var characterCountElement = conversationElement.find('.contact-text-character-count');
-      characterCountElement.text("160 characters remaining (1)");
 
       var footer = conversationElement.find('.message-panel-footer');
       var hidden = conversationElement.find('.contact-text-container-hidden');
 
       hidden.show();
       var input = hidden.find('.contact-text-content');
+      
+      var recalcCharacterCount = function() {
+        var inputString = input.val();
+        var len = inputString.length;
+        var pages = len / 160 + 1;
+        var charactersLeft = 160 - (len % 160);
+        var text = sprintf("%d characters remaining (%d)", charactersLeft, pages);
+        characterCountElement.text(text);
+      }
+      
+      recalcCharacterCount();
+      
       setTimeout(function() {
         input.focus();
       }, 200);
@@ -97,11 +108,7 @@ var page = new function() {
       
       input.keypress(function(event) {
         var inputString = input.val();
-        var len = inputString.length;
-        var pages = len / 160 + 1;
-        var charactersLeft = 160 - (len % 160);
-        var text = sprintf("%d characters remaining (%d)", charactersLeft, pages);
-        characterCountElement.text(text);
+        recalcCharacterCount();
         
         if (event.which != 13 || event.shiftKey)
           return;
@@ -232,10 +239,16 @@ var page = new function() {
     else {
       from.text('Me');
     }
-    if (message.type == 'pending')
+    if (message.type == 'pending') {
       $(messageElement).find('.message-pending').removeClass('hidden');
-    else
+      var expiredTime = new Date().getTime() - 5 * 60 * 1000;
+      if (message.date < expiredTime) {
+        $(messageElement).find('.message-pending').attr('src', 'images/message-failed.png');
+      }
+    }
+    else {
       $(messageElement).find('.message-pending').addClass('hidden');
+    }
     if (message.image) {
       var img = $('<img></img>').attr('src', sprintf("%s/%s/%s", desksms.IMAGE_URL, encodeURIComponent(message.number), encodeURIComponent(message.date)));
       $(messageElement).find(".message-content").append(img);
