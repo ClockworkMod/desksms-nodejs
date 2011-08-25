@@ -103,8 +103,10 @@ var page = new function() {
         var text = sprintf("%d characters remaining (%d)", charactersLeft, pages);
         characterCountElement.text(text);
         
-        if (event.which != 13)
+        if (event.which != 13 || event.shiftKey)
           return;
+        event.stopPropagation();
+        event.preventDefault();
         var contents = input.val();
         if (contents == "")
           return;
