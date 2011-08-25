@@ -44,7 +44,7 @@ var facebookContacts = new function() {
     });
     
     if (bestDistance < 4) {
-      return sprintf('http://graph.facebook.com/%s/picture?type=normal', best.id);
+      return sprintf('https://graph.facebook.com/%s/picture?type=normal', best.id);
     }
 
     return null;
@@ -65,6 +65,7 @@ var facebookContacts = new function() {
           return;
         facebookContacts.facebookData = data;
         localStorage['facebook.facebook_data'] = JSON.stringify(data);
+        window.location.reload();
       });
     }
     else {
