@@ -116,18 +116,22 @@
           #conversation-id.hidden
 
         #contact-messages-internal.span7.columns.well
-          #contact-message-template.contact-message-template.hidden
-            strong
-              span.message-from
-            span=': '
-            span.message-content
-            span=' '
-            em
-              span.message-date
-            span=' '
-            img.message-pending(src='images/message-pending.png')
+          .conversation-read-state
+            #contact-message-template.contact-message-template.hidden
+              strong
+                span.message-from
+              span=': '
+              span.message-content
+              span=' '
+              em
+                span.message-date
+              span=' '
+              img.message-pending(src='images/message-pending.png')
 
-          #last-message.padded-bottom
+            #last-message
+
+
+          .padded-bottom
           .padded-bottom
           form.contact-text-container-hidden.hidden(action='javascript:void(0)')
             textarea.xlarge.contact-text-content(type="text", style='width: 100%', placeholder='shift-enter to start a new line')

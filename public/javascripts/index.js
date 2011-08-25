@@ -295,20 +295,22 @@ var page = new function() {
     $(conversationElement).find('.contact-last-message-date').text(lastMessageDate);
     $(conversationElement).find('#conversation-id').text(conversation.id);
     
-    var conversationUnreadElement = $(conversationElement).find('.conversation-unread');
+    var conversationReadStateElement = $(conversationElement).find('.conversation-read-state');
     conversationElement.unbind('click');
     conversationElement.click(function() {
       if (!conversation.read) {
         desksms.read();
         conversation.read = true;
       }
-      conversationUnreadElement.fadeOut(500);
+      conversationReadStateElement.animate({ 'border-color': "transparent" }, 'fast', function() {
+        conversationReadStateElement.removeClass('conversation-unread');
+        conversationReadStateElement.css('border-color', '')
+      });
     });
     if (conversation.read)
-      conversationUnreadElement.hide();
+      conversationReadStateElement.removeClass('conversation-unread');
     else
-      conversationUnreadElement.show();
-    conversationUnreadElement.show();
+      conversationReadStateElement.addClass('conversation-unread');
 
     var contact = conversation.contact;
     var cachedContact = page.getCachedContact(conversation);
