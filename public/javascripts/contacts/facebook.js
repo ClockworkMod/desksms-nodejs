@@ -25,18 +25,19 @@ var facebookContacts = new function() {
   }
   
   this.getAuthorizationUrl = function() {
-    var url = 'https://www.facebook.com/dialog/oauth?client_id=166240436784956&redirect_uri=%s&response_type=token';
-    url = sprintf(url, encodeURIComponent(window.location.protocol + '//' + window.location.host + window.location.pathname + "#token_type=facebook"));
+    var clientId = window.location.host == 'desksms.appspot.com' ? '166240436784956' : '211883155532719';
+    var url = 'https://www.facebook.com/dialog/oauth?client_id=%s&redirect_uri=%s&response_type=token';
+    url = sprintf(url, clientId, encodeURIComponent(window.location.protocol + '//' + window.location.host + window.location.pathname + "#token_type=facebook"));
     return url;
   }
   
-  this.getContactPhoto = function(contact) {
+  this.getPhotoForName = function(contactName) {
     if (!facebookContacts.facebookData)
       return;
     var best = null;
     var bestDistance = 10000;
     $.each(facebookContacts.facebookData.data, function(key, fbContact) {
-      var distance = levenshtein(contact.name, fbContact.name);
+      var distance = levenshtein(contactName, fbContact.name);
       if (distance < bestDistance) {
         bestDistance = distance;
         best = fbContact;

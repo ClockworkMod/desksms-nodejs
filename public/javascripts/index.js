@@ -351,8 +351,23 @@ var page = new function() {
       console.log('using cached base64 contact photo for ' + conversation.number);
       page.loadContactPhoto(contactImage, conversation, cachedContact);
     }
+    else if (conversation.name) {
+      // try to fall back to a facebook photo by doing a name match
+      var photoElement = contactImage;
+      var facebookPhoto = facebookContacts.getPhotoForName(conversation.name);
+      if (facebookPhoto) {
+        photoElement.attr('src', facebookPhoto);
+        photoElement.error(function() {
+          console.log('facebook photo load failed for ' + conversation.number)
+          photoElement.attr('src', 'images/desksms-small.jpg');
+        });
+      }
+      else {
+        console.log('no contact photo available for ' + conversation.number)
+      }
+    }
     else {
-      console.log('no contact photo available for ' + conversation.number);
+      console.log('no contact photo available for ' + conversation.number)
     }
 
     return conversationElement;
@@ -612,7 +627,7 @@ var page = new function() {
     // if we don't have local cache, or this contact is from cache
     // just use the explicit url
     if (!skipFacebook) {
-      var facebookPhoto = facebookContacts.getContactPhoto(contact);
+      var facebookPhoto = facebookContacts.getPhotoForName(contact.name);
       if (facebookPhoto) {
         photoElement.attr('src', facebookPhoto);
         photoElement.error(function() {
