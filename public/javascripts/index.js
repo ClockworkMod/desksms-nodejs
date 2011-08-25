@@ -76,7 +76,7 @@ var page = new function() {
 
       hidden.show();
       var input = hidden.find('.contact-text-content');
-      
+
       var recalcCharacterCount = function() {
         var inputString = input.val();
         var len = inputString.length;
@@ -85,9 +85,9 @@ var page = new function() {
         var text = sprintf("%d characters remaining (%d)", charactersLeft, pages);
         characterCountElement.text(text);
       }
-      
+
       recalcCharacterCount();
-      
+
       setTimeout(function() {
         input.focus();
       }, 200);
