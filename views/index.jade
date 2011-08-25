@@ -1,80 +1,81 @@
 .topbar-wrapper(style="z-index: 5;")
   .topbar
-    .container.fixed
-      .row
-        .span10.columns.offset1
-          h3
-            a#desksms-header.link.logo(href='https://market.android.com/details?id=com.koushikdutta.desktopsms') DeskSMS
-          ul
-            li
-              a#desksms-login.login-hide.link(href='javascript:void(0)') Login
-            li
-              a#connect-google.connect-google.link(href='javascript:void(0)') Sync Contacts
-            li
-              a#buy-desksms.buy-desksms.hidden(href='javascript:page.purchase()')
+    .fill
+      .container.fixed
+        .row
+          .span10.columns.offset1
+            h3
+              a#desksms-header.link.logo(href='https://market.android.com/details?id=com.koushikdutta.desktopsms') DeskSMS
+            ul
+              li
+                a#desksms-login.login-hide.link(href='javascript:void(0)') Login
+              li
+                a#connect-google.connect-google.link(href='javascript:void(0)') Sync Contacts
+              li
+                a#buy-desksms.buy-desksms.hidden(href='javascript:page.purchase()')
 
-          form(action='javascript:void(0)')
-            input#contact-search(style='width: 170px;', type='text', placeholder='Enter Name or Number')
+            form(action='javascript:void(0)')
+              input#contact-search(style='width: 170px;', type='text', placeholder='Enter Name or Number')
 
-          ul.nav.secondary-nav(style='padding-right: 20px')
-            li.menu
-              a.menu(href='#')
-                img(src='images/options.png')
-              ul.menu-dropdown
-                li
-                  a(href='javascript:page.showNotificationSettings()') Notification
-                li
-                  a(href='javascript:page.showDeliveryOptions()') SMS Delivery
-                li
-                  a.connect-google.link(href='javascript:void(0)') Sync Google
-                li
-                  a.connect-facebook.link(href='javascript:void(0)') Sync Facebook
-                li#enable-chrome-notifications
-                  a(href='javascript:notifications.requestPermissions()') Chrome Notifications
-                li.divider
-                li
-                  a(href='javascript:page.pong()') Test Connection
-                  a(href='javascript:page.forceSync()') Force Sync
-                li.divider
-                li.login-show.hidden
-                  a#desksms-logout.login-show.link(href='javascript:void(0)') Logout
-          script
-            $(document).ready(function(){
-              $("body").bind("click", function(e) {
-                  $("ul.menu-dropdown").hide();
-                  $('a.menu').parent("li").removeClass("open").children("ul.menu-dropdown").hide();
+            ul.nav.secondary-nav(style='padding-right: 20px')
+              li.menu
+                a.menu(href='#')
+                  img(src='images/options.png')
+                ul.menu-dropdown
+                  li
+                    a(href='javascript:page.showNotificationSettings()') Notification
+                  li
+                    a(href='javascript:page.showDeliveryOptions()') SMS Delivery
+                  li
+                    a.connect-google.link(href='javascript:void(0)') Sync Google
+                  li
+                    a.connect-facebook.link(href='javascript:void(0)') Sync Facebook
+                  li#enable-chrome-notifications
+                    a(href='javascript:notifications.requestPermissions()') Chrome Notifications
+                  li.divider
+                  li
+                    a(href='javascript:page.pong()') Test Connection
+                    a(href='javascript:page.forceSync()') Force Sync
+                  li.divider
+                  li.login-show.hidden
+                    a#desksms-logout.login-show.link(href='javascript:void(0)') Logout
+            script
+              $(document).ready(function(){
+                $("body").bind("click", function(e) {
+                    $("ul.menu-dropdown").hide();
+                    $('a.menu').parent("li").removeClass("open").children("ul.menu-dropdown").hide();
+                  });
+
+                $("a.menu").click(function(e) {
+                   var $target = $(this);
+                   var $parent = $target.parent("li");
+                   var $siblings = $target.siblings("ul.menu-dropdown");
+                   var $parentSiblings = $parent.siblings("li");
+                   if ($parent.hasClass("open")) {
+                     $parent.removeClass("open");
+                     $siblings.hide();
+                   } else {
+                     $parent.addClass("open");
+                     $siblings.show();
+                   }
+                   $parentSiblings.children("ul.menu-dropdown").hide();
+                   $parentSiblings.removeClass("open");
+                   return false;
+                 });
                 });
 
-              $("a.menu").click(function(e) {
-                 var $target = $(this);
-                 var $parent = $target.parent("li");
-                 var $siblings = $target.siblings("ul.menu-dropdown");
-                 var $parentSiblings = $parent.siblings("li");
-                 if ($parent.hasClass("open")) {
-                   $parent.removeClass("open");
-                   $siblings.hide();
-                 } else {
-                   $parent.addClass("open");
-                   $siblings.show();
-                 }
-                 $parentSiblings.children("ul.menu-dropdown").hide();
-                 $parentSiblings.removeClass("open");
-                 return false;
-               });
-              });
+                // clear all cookiess, this is all done with static content.
+                function deleteAllCookies() {
+                    var cookies = document.cookie.split(";");
 
-              // clear all cookiess, this is all done with static content.
-              function deleteAllCookies() {
-                  var cookies = document.cookie.split(";");
-
-                  for (var i = 0; i < cookies.length; i++) {
-                      var cookie = cookies[i];
-                      var eqPos = cookie.indexOf("=");
-                      var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-                      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-                  }
-              }
-              deleteAllCookies();
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i];
+                        var eqPos = cookie.indexOf("=");
+                        var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    }
+                }
+                deleteAllCookies();
 
 .container(style='padding-top: 60px')
   - each notification in oggs
@@ -82,7 +83,7 @@
     audio.hidden(id=notificationId)
       source(src='notifications/' + notification)
 
-  - each notification in wavs
+  - each notification in mp3s
     - var notificationId = 'notification-' + notification.replace('.', '-');
     audio.hidden(id=notificationId)
       source(src='notifications/' + notification)
@@ -163,7 +164,7 @@ iframe#push-iframe.hidden(src='push.html')
         .row
           .span2.columns.padded-bottom
             a.notification.btn.small.secondary(href='javascript:void(0);', onclick='page.setNotification(this)', id='notification-button-None') None
-        - each pair in [['ogg', oggs], ['wav', wavs]]
+        - each pair in [['ogg', oggs], ['mp3', mp3s]]
           - var notifications = pair[1]
           - var notificationType = pair[0]
           - var count = 0

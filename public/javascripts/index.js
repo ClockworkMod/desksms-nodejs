@@ -845,11 +845,11 @@ var page = new function() {
       sound = 'None';
     if (navigator.userAgent.indexOf('Chrome') != -1 || navigator.userAgent.indexOf('Firefox') != -1) {
       $('.notification-type-ogg').show();
-      $('.notification-type-wav').hide();
+      $('.notification-type-mp3').hide();
     }
     else {
       $('.notification-type-ogg').hide();
-      $('.notification-type-wav').show();
+      $('.notification-type-mp3').show();
     }
     $('#notification-button-' + sound).removeClass('secondary').addClass('primary');
     $('#notification-settings').show();

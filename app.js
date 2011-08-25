@@ -56,17 +56,17 @@ app.get('/', function(req, res){
     return filename.substring(0, filename.indexOf('.'));
   }
   var oggs = [];
-  var wavs = [];
+  var mp3s = [];
   for (var i in notificationFiles) {
     var n = notificationFiles[i];
     var ext = path.extname(n);
     if (ext == '.ogg')
       oggs.push(n);
     else
-      wavs.push(n);
+      mp3s.push(n);
   }
 
-  renderPage(req, res, 'index', { oggs: oggs, wavs: wavs, stripExtension: stripExtension, extname: path.extname});
+  renderPage(req, res, 'index', { oggs: oggs, mp3s: mp3s, stripExtension: stripExtension, extname: path.extname});
 });
 
 var listenPort = process.env.PORT == null ? 3000 : parseInt(process.env.PORT);

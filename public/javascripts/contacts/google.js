@@ -66,13 +66,14 @@ var googleContacts = new function() {
         return;
       }
 
+      var type = $.browser.msie ? "jsonp" : "json";
       $.get('https://www.google.com/m8/feeds/contacts/default/full?max-results=10000&alt=json', {oauth_token: token}, function(data) {
         console.log('caching google contacts');
         localStorage['google-contacts'] = JSON.stringify(data);
         console.log('google contacts cached');
         loader(data, false);
       },
-      "json")
+      type)
       .error(function(err) {
         console.log(err);
         
