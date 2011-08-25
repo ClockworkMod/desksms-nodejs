@@ -76,7 +76,7 @@
               }
               deleteAllCookies();
 
-.container
+.container(style='padding-top: 60px')
   - each notification in oggs
     - var notificationId = 'notification-' + notification.replace('.', '-');
     audio.hidden(id=notificationId)
@@ -86,8 +86,6 @@
     - var notificationId = 'notification-' + notification.replace('.', '-');
     audio.hidden(id=notificationId)
       source(src='notifications/' + notification)
-
-  .container(style='padding-top: 60px')
 
   section#alerts
     .row
