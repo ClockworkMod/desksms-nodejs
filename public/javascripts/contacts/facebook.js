@@ -32,11 +32,17 @@ var facebookContacts = new function() {
   }
   
   this.getPhotoForName = function(contactName) {
+    // require last name
+    if (contactName.indexOf(' ') == -1)
+      return null;
     if (!facebookContacts.facebookData)
       return;
     var best = null;
     var bestDistance = 10000;
     $.each(facebookContacts.facebookData.data, function(key, fbContact) {
+      // require last name
+      if (fbContact.name.indexOf(' ') == -1)
+        return;
       var distance = levenshtein(contactName, fbContact.name);
       if (distance < bestDistance) {
         bestDistance = distance;
