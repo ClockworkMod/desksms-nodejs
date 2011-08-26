@@ -18,7 +18,12 @@ Conversation.prototype.addMessage = function(message) {
 var desksms = new function() {
   this.BASE_URL = "https://desksms.appspot.com";
   this.API_URL = this.BASE_URL + "/api/v1";
-  this.USER_URL = this.API_URL + "/user/default";
+  {
+    var username = localStorage['desksms.username'];
+    if (!username)
+      username = 'default';
+    this.USER_URL = this.API_URL + '/user/' + username;
+  }
   this.SETTINGS_URL = this.USER_URL + "/settings";
   this.SMS_URL = this.USER_URL + "/sms";
   this.CALL_URL = this.USER_URL + "/call";
