@@ -109,7 +109,7 @@ var page = new function() {
       input.keypress(function(event) {
         var inputString = input.val();
         recalcCharacterCount();
-        
+
         if (event.which != 13 || event.shiftKey)
           return;
         event.stopPropagation();
@@ -121,12 +121,14 @@ var page = new function() {
         var conversation = desksms.conversations[conversationId];
         var number = conversation.number;
         desksms.sendSms(number, contents, function(err, data) {
-          if (err) {
-            console.log(err);
-            return;
-          }
-          if (data.error) {
-            $('#push-error-text').text(data.error);
+          var errorText;
+          if (err)
+            errorText = 'Error communicating with the server.'
+          else if (data.error)
+            errorText = data.error;
+
+          if (errorText) {
+            $('#push-error-text').text(errorText);
             var pushErrorAlert = $('#push-error-alert');
             pushErrorAlert.show();
             pushErrorAlert.fadeOut(10000, function() {
@@ -761,7 +763,7 @@ var page = new function() {
     $('#buy-dialog').hide();
     var customPayload = { account: desksms.email };
 
-    jsonp(sprintf('https://clockworkbilling.appspot.com/api/v1/order/koushd@gmail.com/desksms.subscription0?custom_payload=%s&buyer_id=%s&sandbox=%s', encodeURIComponent(JSON.stringify(customPayload)), desksms.buyerId, page.sandbox),
+    jsonp(sprintf('https://clockworkbilling.appspot.com/api/v1/order/koushd@gmail.com/desksms.subscription0?custom_payload=%s&buyer_id=%s&sandbox=%s&buyer_email=%s', encodeURIComponent(JSON.stringify(customPayload)), desksms.buyerId, page.sandbox, desksms.email),
       function(err, data) {
         if (err)
           return;
@@ -801,11 +803,28 @@ var page = new function() {
   this.pongReceived = false;
   this.pong = function() {
     this.pongReceived = false;
-    desksms.pong();
+    desksms.pong(function(err, data) {
+      var errorText;
+      if (err)
+        errorText = 'Error communicating with the server.'
+      else if (data.error)
+        errorText = data.error;
+
+      if (errorText) {
+        $('#push-error-text').text(data.error);
+        var pushErrorAlert = $('#push-error-alert');
+        pushErrorAlert.show();
+        pushErrorAlert.fadeOut(10000, function() {
+          pushErrorAlert.hide();
+        });
+        page.pongReceived = true;
+        return;
+      }
+    });
     var contentStatus = $('#content-status');
     contentStatus.show();
     contentStatus.text('Checking connection to phone...');
-    contentStatus.fadeOut(9000, function() {
+    contentStatus.fadeOut(15000, function() {
       contentStatus.hide();
       contentStatus.text('');
     });
@@ -813,13 +832,13 @@ var page = new function() {
     setTimeout(function() {
       if (page.pongReceived)
         return;
-      contentStatus.show();
-      contentStatus.text('The push connection to the phone has failed!');
-      contentStatus.fadeOut(10000, function() {
-        contentStatus.hide();
-        contentStatus.text('');
+      $('#push-error-text').text('The push connection to the phone has failed!');
+      var pushErrorAlert = $('#push-error-alert');
+      pushErrorAlert.show();
+      pushErrorAlert.fadeOut(10000, function() {
+        pushErrorAlert.hide();
       });
-    }, 10000);
+    }, 15000);
   }
   
   this.closeDialog = function(e) {

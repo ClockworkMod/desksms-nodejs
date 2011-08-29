@@ -19,10 +19,10 @@ var desksms = new function() {
   this.BASE_URL = "https://desksms.appspot.com";
   this.API_URL = this.BASE_URL + "/api/v1";
   {
-    var username = localStorage['desksms.username'];
-    if (!username)
-      username = 'default';
-    this.USER_URL = this.API_URL + '/user/' + username;
+    var email = localStorage['desksms.email'];
+    if (!email)
+      email = 'default';
+    this.USER_URL = this.API_URL + '/user/' + email;
   }
   this.SETTINGS_URL = this.USER_URL + "/settings";
   this.SMS_URL = this.USER_URL + "/sms";
