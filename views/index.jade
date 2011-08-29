@@ -33,6 +33,9 @@
                   li#enable-chrome-notifications
                     a(href='javascript:notifications.requestPermissions()') Chrome Notifications
                   li.divider
+                  li#Themes
+                    a(href='javascript:page.showThemes()') Themes
+                  li.divider
                   li
                     a(href='javascript:page.pong()') Test Connection
                     a(href='javascript:page.forceSync()') Force Sync
@@ -226,3 +229,18 @@ iframe#push-iframe.hidden(src='push.html')
             a#setting-forward_web.setting.btn.small.secondary(href='javascript:void(0);', onclick='page.toggleSetting(this)') Web Interface
       .modal-footer
         a.btn.primary(href='javascript:void(0)', onclick='page.updateDeliveryOptions(this)') Save
+
+#themes-dialog.hidden.dialog-container
+  .ui-dialog(style='outline-width: 0px; outline-style: initial; outline-color: initial; height: auto; width: 100%; top: 40px; display: block; z-index: 1001;')
+    #test-modal.modal(style='position: relative; top: auto; left: auto; margin: 0 auto; z-index: 1')
+      .modal-header
+        h3 Themes
+        a.close(href='javascript:void(0)', onclick='page.closeDialog(this)') &times;
+      section.modal-body
+        center
+          .padded-bottom
+            a#theme-default.theme.btn.small.secondary(theme='default', href='javascript:void(0);', onclick='page.switchTheme(this)') Default
+          .padded-bottom
+            a#theme-metro-dark.setting.btn.small.secondary(theme='metro-dark', href='javascript:void(0);', onclick='page.switchTheme(this)') Metro Dark (wavedashdoc)
+      .modal-footer
+        a.btn.primary(href='javascript:void(0)', onclick='page.closeDialog(this)') Done

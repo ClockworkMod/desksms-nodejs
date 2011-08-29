@@ -892,6 +892,29 @@ var page = new function() {
       $('#setting-' + id).removeClass('primary').addClass('secondary');
   }
   
+  this.showThemes = function() {
+    var theme = localStorage.theme;
+    if (!theme)
+      theme = 'default';
+    $('.theme').removeClass('primary').addClass('secondary');
+    $('#theme-' + theme).removeClass('secondary').addClass('primary');
+
+    $('#themes-dialog').show();
+  }
+  
+  this.switchTheme = function(element) {
+    element = $(element);
+    var id = element.attr('id');
+    id = id.substring(id.indexOf('-') + 1);
+    if (!id || id == 'default') {
+      delete localStorage.theme;
+    }
+    else {
+      localStorage.theme = id;
+    }
+    window.location.reload();
+  }
+  
   this.forceSync = function() {
     desksms.tickle('outbox');
   }
