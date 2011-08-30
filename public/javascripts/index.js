@@ -635,10 +635,16 @@ var page = new function() {
     daysLeft = Math.round(daysLeft);
     $('#account-status').text(sprintf("%d days remaining", daysLeft));
     $('#account-status').show();
-    if (daysLeft < 14 || page.sandbox) {
+    if (daysLeft < 7 || page.sandbox) {
       daysLeft = Math.max(daysLeft, 0);
       $('#buy-desksms').text(sprintf("%d days left.", daysLeft));
       $('#buy-desksms').removeClass('hidden');
+      $('#facebook-like').addClass('hidden');
+    }
+    else {
+      // show the like button instead
+      $('#buy-desksms').addClass('hidden');
+      $('#facebook-like').removeClass('hidden');
     }
   }
   
