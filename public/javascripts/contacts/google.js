@@ -93,4 +93,9 @@ var googleContacts = new function() {
 
     haveToken();
   });
+
+  this.clearData = function() {
+    delete localStorage['google.access_token'];
+    delete localStorage['google-contacts'];
+  }
 }

@@ -82,4 +82,9 @@ var facebookContacts = new function() {
         facebookContacts.facebookData = JSON.parse(data);
     }
   });
+  
+  this.clearData = function() {
+    delete localStorage['facebook.access_token'];
+    delete localStorage['facebook.facebook_data'];
+  }
 }

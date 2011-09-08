@@ -415,12 +415,13 @@ var page = new function() {
         console.log(err);
         return;
       }
+      var messages = data.data;
       hasSuccessfullySynced = true;
-      if (data.data == null) {
+      if (messages == null) {
         console.log('no data returned from sms call');
         return;
       }
-      if (data.data.length == 0)
+      if (messages.length == 0)
         return;
 
       if (!page.hasMarkedRead) {
@@ -429,7 +430,7 @@ var page = new function() {
       }
 
       var conversations = {};
-      $.each(data.data, function(index, message) {
+      $.each(messages, function(index, message) {
         conversations[message.conversation.id] = message.conversation;
         lastRefresh = Math.max(lastRefresh, message.date);
       });
@@ -450,7 +451,6 @@ var page = new function() {
         page.addConversationToTop(convo);
       });
 
-      var messages = data.data;
       if (startRefresh == 0) {
         var contentStatus = $('#content-status');
         if (messages.length == 0) {
@@ -942,5 +942,16 @@ var page = new function() {
   
   this.forceSync = function() {
     desksms.tickle('outbox');
+  }
+  
+  this.clearSyncedData = function() {
+    facebookContacts.clearData();
+    googleContacts.clearData();
+    for (var key in localStorage) {
+      if (key.indexOf('contact-') == 0) {
+        delete localStorage[key];
+      }
+    }
+    window.location.reload();
   }
 }
