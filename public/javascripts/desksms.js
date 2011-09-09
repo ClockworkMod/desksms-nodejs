@@ -111,6 +111,18 @@ var desksms = new function() {
       if (data.data.length == 0)
         return;
       // bucket these into conversations
+      var db = desksms.db;
+      if (db) {
+        db.transaction(function(t) {
+          $.each(data.data, function(index, message) {
+            t.executeSql('insert or replace into message (date, number, name, key, message, type) values (?, ?, ?, ?, ?, ?)', [message.date, message.number, message.name, message.key, message.message, message.type]);
+          });
+        }, function(err) {
+          console.log(err);
+        }, function(err) {
+          console.log(err);
+        });
+      }
       $.each(data.data, function(index, message) {
         var conversation = desksms.startConversation(message.number);
         if (message.type == 'incoming')
@@ -135,6 +147,91 @@ var desksms = new function() {
       desksms.parseSms(data);
       cb(err, data);
     }, options);
+  }
+  
+  this.prepareDatabase = function() {
+    desksms.db = window.openDatabase("desksms", null, "DeskSMS Database", 1024 * 1024 * 10);
+    var db = desksms.db;
+    var version = localStorage['desksms.db.version'];
+    var res = db.transaction(function(t) {
+      if (version == null) {
+        var res = t.executeSql('create table if not exists message (date integer primary key not null, number text not null, name text, key text not null, message text, type text)');
+        console.log(res);
+        version = 1;
+      }
+    }, null, function() {
+      localStorage['desksms.db.version'] = version;
+    });
+    console.log(res);
+  }
+
+  this.lastRefresh = 0;
+  this.refreshInProgress = false;
+  this.db = null;
+  this.refreshInbox = function(cb) {
+    if (this.refreshInProgress) {
+      console.log("sync in progress");
+      return;
+    }
+  
+    this.refreshInProgress = true;
+
+    var lastRefresh = this.lastRefresh;
+    var startRefresh = this.lastRefresh;
+    if (lastRefresh == 0)
+      lastRefresh = new Date().getTime() - 3 * 24 * 60 * 60 * 1000;
+
+    var existingMessages = null;
+    var refresher = function() {
+      console.log(lastRefresh);
+      desksms.getSms({ after_date: lastRefresh }, function(err, data) {
+        desksms.refreshInProgress = false;
+        if (cb) {
+          var messages = null;
+          if (data) {
+            if (existingMessages && data.data)
+              messages = existingMessages.concat(data.data);
+            else
+              messages = data.data;
+          }
+          cb(err, messages);
+        }
+      });
+    }
+
+    if (startRefresh == 0) {
+      // this is initial population, let's see if we can grab it from the local database first.
+      if (window.openDatabase) {
+        if (!desksms.db) {
+          desksms.prepareDatabase();
+        }
+        var db = desksms.db;
+        db.readTransaction(function(t) {
+          t.executeSql('select * from message where date > ? order by date asc', [lastRefresh], function(t, results) {
+            if (results && results.rows) {
+              existingMessages = [];
+              for (var i = 0; i < results.rows.length; i++) {
+                var message = results.rows.item(i);
+                var conversation = desksms.startConversation(message.number);
+                if (message.name)
+                  conversation.name = message.name;
+                conversation.addMessage(message);
+                lastRefresh = Math.max(message.date, lastRefresh);
+                existingMessages.push(message)
+              }
+            }
+          });
+        }, function(t, err) {
+          console.log(err);
+          refresher();
+        }, function() {
+          refresher();
+        });
+      }
+      else {
+        refresher();
+      }
+    }
   }
   
   this.push = function(cb) {

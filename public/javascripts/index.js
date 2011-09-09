@@ -393,30 +393,20 @@ var page = new function() {
   }
   
   this.hasMarkedRead = false;
-  this.lastRefresh = 0;
-  this.refreshInProgress = false;
   this.hasSuccessfullySynced = false;
   this.refreshInbox = function(initialSync) {
-    if (page.refreshInProgress)
+    if (page.hasSuccessfullySynced && initialSync) {
+      console.log("have already successfully synced. bailing.");
       return;
-    if (page.hasSuccessfullySynced && initialSync)
-      return;
-    page.refreshInProgress = true;
+    }
     
-    var lastRefresh = this.lastRefresh;
-    var startRefresh = this.lastRefresh;
-    if (lastRefresh == 0)
-      lastRefresh = new Date().getTime() - 3 * 24 * 60 * 60 * 1000;
-    
-    console.log(lastRefresh);
-    desksms.getSms({ after_date: lastRefresh }, function(err, data) {
-      page.refreshInProgress = false;
+    var startRefresh = desksms.lastRefresh;
+    desksms.refreshInbox(function(err, messages) {
       if (err) {
         console.log(err);
         return;
       }
-      var messages = data.data;
-      hasSuccessfullySynced = true;
+      page.hasSuccessfullySynced = true;
       if (messages == null) {
         console.log('no data returned from sms call');
         return;
@@ -432,7 +422,6 @@ var page = new function() {
       var conversations = {};
       $.each(messages, function(index, message) {
         conversations[message.conversation.id] = message.conversation;
-        lastRefresh = Math.max(lastRefresh, message.date);
       });
 
       conversations = sorty(keys(conversations), function(key) {
@@ -452,6 +441,7 @@ var page = new function() {
       });
 
       if (startRefresh == 0) {
+        console.log("startRefresh: " + startRefresh);
         var contentStatus = $('#content-status');
         if (messages.length == 0) {
           contentStatus.show();
@@ -485,8 +475,6 @@ var page = new function() {
       });
 
       page.setClickHandlers();
-      
-      page.lastRefresh = Math.max(page.lastRefresh, lastRefresh);
     });
   }
 
