@@ -25,7 +25,7 @@ var desksms = new function() {
     this.USER_URL = this.API_URL + '/user/' + email;
   }
   this.SETTINGS_URL = this.USER_URL + "/settings";
-  this.SMS_URL = this.USER_URL + "/sms";
+  this.SMS_URL = this.USER_URL + "/getsms";
   this.CALL_URL = this.USER_URL + "/call";
   this.DIAL_URL = this.USER_URL + "/dial";
   this.OUTBOX_URL = this.USER_URL + "/outbox";
