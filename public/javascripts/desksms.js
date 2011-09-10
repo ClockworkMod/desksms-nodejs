@@ -76,6 +76,7 @@ var desksms = new function() {
         desksms.email = data.email;
         desksms.registrationId = data.registration_id;
         desksms.buyerId = data.buyer_id;
+        localStorage['desksms.last_email'] = desksms.email;
         console.log(desksms.buyerId);
       }
       cb(err, data);
@@ -108,6 +109,7 @@ var desksms = new function() {
   */
   this.parseSms = function(data) {
     if (data) {
+      localStorage['desksms.last_email'] = data.email;
       if (data.data.length == 0)
         return;
       // bucket these into conversations
@@ -115,7 +117,7 @@ var desksms = new function() {
       if (db) {
         db.transaction(function(t) {
           $.each(data.data, function(index, message) {
-            t.executeSql('insert or replace into message (date, number, name, key, message, type) values (?, ?, ?, ?, ?, ?)', [message.date, message.number, message.name, message.key, message.message, message.type]);
+            t.executeSql('insert or replace into message (date, number, name, key, message, type, email) values (?, ?, ?, ?, ?, ?, ?)', [message.date, message.number, message.name, message.key, message.message, message.type, data.email]);
           });
         }, function(err) {
           console.log(err);
@@ -155,9 +157,13 @@ var desksms = new function() {
     var version = localStorage['desksms.db.version'];
     var res = db.transaction(function(t) {
       if (version == null) {
-        var res = t.executeSql('create table if not exists message (date integer primary key not null, number text not null, name text, key text not null, message text, type text)');
-        console.log(res);
+        t.executeSql('create table if not exists message (date integer primary key not null, number text not null, name text, key text not null, message text, type text)');
         version = 1;
+      }
+      if (version == 1) {
+        t.executeSql('drop table message');
+        t.executeSql('create table if not exists message (date integer not null, number text not null, name text, key text primary key not null, message text, type text, email text not null)');
+        version = 2;
       }
     }, null, function() {
       localStorage['desksms.db.version'] = version;
@@ -181,36 +187,51 @@ var desksms = new function() {
     if (lastRefresh == 0)
       lastRefresh = new Date().getTime() - 3 * 24 * 60 * 60 * 1000;
 
+    var lastEmail = localStorage['desksms.last_email'];
     var existingMessages = null;
     var refresher = function() {
       console.log(lastRefresh);
       desksms.getSms({ after_date: lastRefresh }, function(err, data) {
         desksms.refreshInProgress = false;
+        var messages;
+        if (existingMessages && existingMessages.length > 0) {
+          if (lastEmail != data.email) {
+            console.log('user change detected, refreshing...');
+            desksms.refreshInbox(cb);
+            return;
+          }
+          messages = existingMessages;
+        }
+        else {
+          messages = [];
+        }
+        if (data && data.data)
+            messages = messages.concat(data.data);
+        $.each(messages, function(index, message) {
+          lastRefresh = Math.max(message.date, lastRefresh);
+        });
+        desksms.lastRefresh = lastRefresh;
+
+        // sort it in case the server sent some stuff from the past?
+        // that would mess up the merge.
+        messages = sorty(messages, function(message) {
+          return message.date;
+        });
+
         if (cb) {
-          var messages;
-          if (existingMessages)
-            messages = existingMessages;
-          else
-            messages = [];
-          if (data && data.data)
-              messages = messages.concat(data.data);
-          $.each(messages, function(index, message) {
-            lastRefresh = Math.max(message.date, lastRefresh);
-          });
-          desksms.lastRefresh = lastRefresh;
           cb(err, messages);
         }
       });
     }
 
-    if (startRefresh == 0 && window.openDatabase) {
+    if (startRefresh == 0 && window.openDatabase && lastEmail) {
       // this is initial population, let's see if we can grab it from the local database first.
       if (!desksms.db) {
         desksms.prepareDatabase();
       }
       var db = desksms.db;
       db.readTransaction(function(t) {
-        t.executeSql('select * from message where date > ? order by date asc', [lastRefresh], function(t, results) {
+        t.executeSql('select * from message where date > ? and email = ? order by date asc', [lastRefresh, lastEmail], function(t, results) {
           if (results && results.rows) {
             existingMessages = [];
             for (var i = 0; i < results.rows.length; i++) {
@@ -231,6 +252,7 @@ var desksms = new function() {
       });
     }
     else {
+      console.log('full refresh');
       refresher();
     }
   }

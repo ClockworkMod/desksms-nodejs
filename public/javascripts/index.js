@@ -441,7 +441,6 @@ var page = new function() {
       });
 
       if (startRefresh == 0) {
-        console.log("startRefresh: " + startRefresh);
         var contentStatus = $('#content-status');
         if (messages.length == 0) {
           contentStatus.show();
