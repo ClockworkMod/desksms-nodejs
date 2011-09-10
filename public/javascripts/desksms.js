@@ -187,50 +187,51 @@ var desksms = new function() {
       desksms.getSms({ after_date: lastRefresh }, function(err, data) {
         desksms.refreshInProgress = false;
         if (cb) {
-          var messages = null;
-          if (data) {
-            if (existingMessages && data.data)
-              messages = existingMessages.concat(data.data);
-            else
-              messages = data.data;
-          }
+          var messages;
+          if (existingMessages)
+            messages = existingMessages;
+          else
+            messages = [];
+          if (data && data.data)
+              messages = messages.concat(data.data);
+          $.each(messages, function(index, message) {
+            lastRefresh = Math.max(message.date, lastRefresh);
+          });
+          desksms.lastRefresh = lastRefresh;
           cb(err, messages);
         }
       });
     }
 
-    if (startRefresh == 0) {
+    if (startRefresh == 0 && window.openDatabase) {
       // this is initial population, let's see if we can grab it from the local database first.
-      if (window.openDatabase) {
-        if (!desksms.db) {
-          desksms.prepareDatabase();
-        }
-        var db = desksms.db;
-        db.readTransaction(function(t) {
-          t.executeSql('select * from message where date > ? order by date asc', [lastRefresh], function(t, results) {
-            if (results && results.rows) {
-              existingMessages = [];
-              for (var i = 0; i < results.rows.length; i++) {
-                var message = results.rows.item(i);
-                var conversation = desksms.startConversation(message.number);
-                if (message.name)
-                  conversation.name = message.name;
-                conversation.addMessage(message);
-                lastRefresh = Math.max(message.date, lastRefresh);
-                existingMessages.push(message)
-              }
+      if (!desksms.db) {
+        desksms.prepareDatabase();
+      }
+      var db = desksms.db;
+      db.readTransaction(function(t) {
+        t.executeSql('select * from message where date > ? order by date asc', [lastRefresh], function(t, results) {
+          if (results && results.rows) {
+            existingMessages = [];
+            for (var i = 0; i < results.rows.length; i++) {
+              var message = results.rows.item(i);
+              var conversation = desksms.startConversation(message.number);
+              if (message.name)
+                conversation.name = message.name;
+              conversation.addMessage(message);
+              existingMessages.push(message)
             }
-          });
-        }, function(t, err) {
-          console.log(err);
-          refresher();
-        }, function() {
-          refresher();
+          }
         });
-      }
-      else {
+      }, function(t, err) {
+        console.log(err);
         refresher();
-      }
+      }, function() {
+        refresher();
+      });
+    }
+    else {
+      refresher();
     }
   }
   
@@ -295,6 +296,15 @@ var desksms = new function() {
       number.push(message.date);
     });
     
+    if (desksms.db) {
+      var db = desksms.db;
+      db.transaction(function(t) {
+        $.each(conversation.messages, function(index, message) {
+          t.executeSql('delete from message where date = ?', [message.date]);
+        });
+      });
+    }
+
     $.each(numbers, function(number, dates) {
       jsonp(desksms.DELETE_CONVERSATION_URL, null, { number: number, dates: JSON.stringify(dates) });
     });
