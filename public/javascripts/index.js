@@ -427,9 +427,6 @@ var page = new function() {
       conversations = sorty(keys(conversations), function(key) {
         return conversations[key].latestMessageDate;
       });
-      conversations = select(conversations, function(index, value) {
-        return value;
-      });
 
       $.each(conversations, function(index, conversation) {
         var convo = desksms.conversations[conversation];
@@ -930,7 +927,7 @@ var page = new function() {
   this.forceSync = function() {
     desksms.tickle('outbox');
   }
-  
+
   this.clearSyncedData = function() {
     facebookContacts.clearData();
     googleContacts.clearData();
@@ -939,6 +936,7 @@ var page = new function() {
         delete localStorage[key];
       }
     }
+    desksms.clearData();
     window.location.reload();
   }
 }

@@ -242,6 +242,7 @@ var desksms = new function() {
               conversation.addMessage(message);
               existingMessages.push(message)
             }
+            console.log('found ' + existingMessages.length + ' cached messages');
           }
         });
       }, function(t, err) {
@@ -344,5 +345,14 @@ var desksms = new function() {
       }
       cb(err, data);
     }, data);
+  }
+
+  this.clearData = function() {
+    delete localStorage['desksms.last_email'];
+    if (desksms.db) {
+      desksms.db.transaction(function(t) {
+        t.executeSql('delete from message');
+      });
+    }
   }
 };
