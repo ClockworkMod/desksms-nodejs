@@ -208,7 +208,8 @@ var desksms = new function() {
         if (data && data.data)
             messages = messages.concat(data.data);
         $.each(messages, function(index, message) {
-          lastRefresh = Math.max(message.date, lastRefresh);
+          if (message.type == 'incoming' || message.type == 'outgoing')
+            lastRefresh = Math.max(message.date, lastRefresh);
         });
         desksms.lastRefresh = lastRefresh;
 
