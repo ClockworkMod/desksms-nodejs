@@ -242,10 +242,10 @@ var page = new function() {
       from.text('Me');
     }
     if (message.type == 'pending') {
-      $(messageElement).find('.message-pending').removeClass('hidden');
+      $(messageElement).find('.message-pending').removeClass('hidden').attr('title', 'Text message delivery pending...');
       var expiredTime = new Date().getTime() - 5 * 60 * 1000;
       if (message.date < expiredTime) {
-        $(messageElement).find('.message-pending').attr('src', 'images/message-failed.png');
+        $(messageElement).find('.message-pending').attr('src', 'images/message-failed.png').attr('title', 'Text message failed to send...');
       }
     }
     else {
