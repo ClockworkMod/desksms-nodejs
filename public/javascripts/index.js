@@ -73,9 +73,52 @@ var page = new function() {
 
       var footer = conversationElement.find('.message-panel-footer');
       var hidden = conversationElement.find('.contact-text-container-hidden');
+      var input = hidden.find('.contact-text-content');
+
+      function sendText() {
+        var contents = input.val();
+        if (contents == "")
+          return;
+        var conversationId = conversationElement.find('#conversation-id').text();
+        var conversation = desksms.conversations[conversationId];
+        var number = conversation.number;
+        desksms.sendSms(number, contents, function(err, data) {
+          var errorText;
+          if (err)
+            errorText = 'Error communicating with the server.'
+          else if (data.error)
+            errorText = data.error;
+
+          if (errorText) {
+            $('#push-error-text').text(errorText);
+            var pushErrorAlert = $('#push-error-alert');
+            pushErrorAlert.show();
+            pushErrorAlert.fadeOut(10000, function() {
+              pushErrorAlert.hide();
+            });
+          }
+          var date = data.data[0];
+          var conversation = desksms.findConversation(number);
+          var pendingMessage = {};
+          pendingMessage.message = contents;
+          pendingMessage.type = 'pending';
+          pendingMessage.date = date;
+          conversation.addMessage(pendingMessage);
+          page.addMessageToConversation(pendingMessage);
+        });
+        
+        input.val('');
+      }
+      
+      if ($(hidden).is(":visible")) {
+        var inputString = input.val();
+        if (inputString != null && inputString.length > 0) {
+          sendText();
+          return;
+        }
+      }
 
       hidden.show();
-      var input = hidden.find('.contact-text-content');
 
       var recalcCharacterCount = function() {
         var inputString = input.val();
@@ -112,40 +155,11 @@ var page = new function() {
 
         if (event.which != 13 || event.shiftKey)
           return;
+
         event.stopPropagation();
         event.preventDefault();
-        var contents = input.val();
-        if (contents == "")
-          return;
-        var conversationId = conversationElement.find('#conversation-id').text();
-        var conversation = desksms.conversations[conversationId];
-        var number = conversation.number;
-        desksms.sendSms(number, contents, function(err, data) {
-          var errorText;
-          if (err)
-            errorText = 'Error communicating with the server.'
-          else if (data.error)
-            errorText = data.error;
-
-          if (errorText) {
-            $('#push-error-text').text(errorText);
-            var pushErrorAlert = $('#push-error-alert');
-            pushErrorAlert.show();
-            pushErrorAlert.fadeOut(10000, function() {
-              pushErrorAlert.hide();
-            });
-          }
-          var date = data.data[0];
-          var conversation = desksms.findConversation(number);
-          var pendingMessage = {};
-          pendingMessage.message = contents;
-          pendingMessage.type = 'pending';
-          pendingMessage.date = date;
-          conversation.addMessage(pendingMessage);
-          page.addMessageToConversation(pendingMessage);
-        });
         
-        input.val('');
+        sendText();
       });
     };
     
