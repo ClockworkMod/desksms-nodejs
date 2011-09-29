@@ -110,7 +110,8 @@ var page = new function() {
         input.val('');
       }
       
-      if ($(hidden).is(":visible")) {
+      var textButton = conversationElement.find('.contact-text')[0];
+      if ($(hidden).is(":visible") && event.target == textButton) {
         var inputString = input.val();
         if (inputString != null && inputString.length > 0) {
           sendText();
