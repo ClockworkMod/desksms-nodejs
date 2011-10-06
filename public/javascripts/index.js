@@ -90,8 +90,8 @@ var page = new function() {
             errorText = data.error;
 
           if (errorText) {
-            $('#push-error-text').text(errorText);
-            var pushErrorAlert = $('#push-error-alert');
+            $('#error-text').text(errorText);
+            var pushErrorAlert = $('#error-alert');
             pushErrorAlert.show();
             pushErrorAlert.fadeOut(10000, function() {
               pushErrorAlert.hide();
@@ -764,6 +764,10 @@ var page = new function() {
     $('#buy-android').fadeIn(500);
   }
   
+  this.purchaseOnPayPal = function() {
+    $('#buy-paypal').fadeIn(500);
+  }
+  
   this.purchaseOnGoogleCheckout = function() {
     $('#buy-dialog').hide();
     var customPayload = { account: desksms.email };
@@ -800,6 +804,7 @@ var page = new function() {
     $('#account-status').hide()
     $('#buy-checkout-complete').hide();
     $('#buy-android').hide();
+    $('#buy-paypal').hide();
     $('#buy-dialog').show();
     $(':focus').blur();
     page.updateStatus();
@@ -816,8 +821,8 @@ var page = new function() {
         errorText = data.error;
 
       if (errorText) {
-        $('#push-error-text').text(data.error);
-        var pushErrorAlert = $('#push-error-alert');
+        $('#error-text').text(data.error);
+        var pushErrorAlert = $('#error-alert');
         pushErrorAlert.show();
         pushErrorAlert.fadeOut(10000, function() {
           pushErrorAlert.hide();
@@ -837,8 +842,8 @@ var page = new function() {
     setTimeout(function() {
       if (page.pongReceived)
         return;
-      $('#push-error-text').text('The push connection to the phone has failed!');
-      var pushErrorAlert = $('#push-error-alert');
+      $('#error-text').text('The push connection to the phone has failed!');
+      var pushErrorAlert = $('#error-alert');
       pushErrorAlert.show();
       pushErrorAlert.fadeOut(10000, function() {
         pushErrorAlert.hide();
@@ -914,6 +919,42 @@ var page = new function() {
       $('#setting-' + id).removeClass('secondary').addClass('primary');
     else
       $('#setting-' + id).removeClass('primary').addClass('secondary');
+  }
+  
+  this.showReferralDialog = function() {
+    $('#referral-message').val('');
+    $('#referral-email').val('');
+    $('#referral-dialog').show();
+  }
+  
+  this.sendReferral = function(element) {
+    this.closeDialog(element);
+    var message = $('#referral-message').val();
+    var referral = $('#referral-email').val();
+    desksms.referral(referral, message, function(err, data) {
+      var errorText = null;
+      if (err)
+        errorText = 'Unknown error.';
+      if (data && !data.success)
+        errorText = data.error;
+      if (errorText) {
+        $('#error-text').text(errorText);
+        var errorAlert = $('#error-alert');
+        errorAlert.show();
+        errorAlert.fadeOut(10000, function() {
+          errorAlert.hide();
+        });
+      }
+      else {
+        var contentStatus = $('#content-status');
+        contentStatus.show();
+        contentStatus.text('Your email recommending DeskSMS has been sent!');
+        contentStatus.fadeOut(15000, function() {
+          contentStatus.hide();
+          contentStatus.text('');
+        });
+      }
+    })
   }
   
   this.showThemes = function() {

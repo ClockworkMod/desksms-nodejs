@@ -37,8 +37,10 @@
                   li#enable-chrome-notifications
                     a(href='javascript:notifications.requestPermissions()') Chrome Notifications
                   li.divider
-                  li#Themes
+                  li
                     a(href='javascript:page.showThemes()') Themes
+                  li
+                    a(href='javascript:page.showReferralDialog()') Referrals
                   li.divider
                   li
                     a(href='javascript:page.pong()') Test Connection
@@ -107,8 +109,8 @@
           p
             a.btn.small.link(href='https://market.android.com/details?id=com.koushikdutta.desktopsms') Download DeskSMS
         #content-status.content-status.hidden.alert-message.success
-        #push-error-alert.alert-message.error.hidden
-          p#push-error-text
+        #error-alert.alert-message.error.hidden
+          p#error-text
 
   section#content-container
     #conversation-template.conversation-template.hidden
@@ -214,6 +216,19 @@ iframe#push-iframe.hidden(src='push.html')
             a(href='javascript:page.purchaseOnMarket()')
               img(src='images/android_market.png')
           #buy-android You can buy a DeskSMS License from within the DeskSMS Android application, or check out <em>now</em> using your same Google Checkout account above!
+          .padded-bottom or
+          .padded-bottom
+            a(href='javascript:page.purchaseOnPayPal()')
+              img(src='images/paypal.gif')
+          #buy-paypal You can buy a DeskSMS License using PayPal from within the DeskSMS Android application, or check out <em>now</em> using your Google Checkout account above!
+          .padded-bottom
+          .padded-bottom
+            #referral-info
+              span You can receive 
+              span
+                b free time 
+              span by referring other users! Use the referral option in the website's menu.
+              
       .modal-footer
         a.btn.primary(href='javascript:void(0)', onclick='page.closeDialog(this)') Done
 
@@ -233,6 +248,21 @@ iframe#push-iframe.hidden(src='push.html')
             a#setting-forward_web.setting.btn.small.secondary(href='javascript:void(0);', onclick='page.toggleSetting(this)') Web Interface
       .modal-footer
         a.btn.primary(href='javascript:void(0)', onclick='page.updateDeliveryOptions(this)') Save
+
+#referral-dialog.hidden.dialog-container
+  .ui-dialog(style='outline-width: 0px; outline-style: initial; outline-color: initial; height: auto; width: 100%; top: 40px; display: block; z-index: 1001;')
+    #test-modal.modal(style='position: relative; top: auto; left: auto; margin: 0 auto; z-index: 1')
+      .modal-header
+        h3 Refer users to get 10 free days on signup! (50 days max)
+        a.close(href='javascript:void(0)', onclick='page.closeDialog(this)') &times;
+      section.modal-body
+        center
+          .padded-bottom
+            input#referral-email(placeholder="friend's email address")
+          .padded-bottom
+            textarea#referral-message(placeholder="Enter a personal message about how you love DeskSMS!")
+      .modal-footer
+        a.btn.primary(href='javascript:void(0)', onclick='page.sendReferral(this)') Send
 
 #themes-dialog.hidden.dialog-container
   .ui-dialog(style='outline-width: 0px; outline-style: initial; outline-color: initial; height: auto; width: 100%; top: 40px; display: block; z-index: 1001;')

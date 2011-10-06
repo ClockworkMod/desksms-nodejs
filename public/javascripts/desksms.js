@@ -40,6 +40,7 @@ var desksms = new function() {
   this.PONG_URL = this.USER_URL + "/pong";
   this.DELETE_CONVERSATION_URL = this.USER_URL + "/delete/conversation";
   this.TICKLE_URL = this.USER_URL + "/tickle";
+  this.REFERRAL_URL = this.USER_URL + "/referral";
 
   this.conversations = {};
   
@@ -355,5 +356,9 @@ var desksms = new function() {
         t.executeSql('delete from message');
       });
     }
+  }
+  
+  this.referral = function(referral, message, cb) {
+    jsonp(this.REFERRAL_URL, cb, { referral: referral, message: message });
   }
 };
