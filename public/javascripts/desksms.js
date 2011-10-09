@@ -331,7 +331,11 @@ var desksms = new function() {
     }
 
     $.each(numbers, function(number, dates) {
-      jsonp(desksms.DELETE_CONVERSATION_URL, null, { number: number, dates: JSON.stringify(dates) });
+      // delete 10 at a time
+      while (dates.length > 0) {
+        var range = dates.splice(0, 10);
+        jsonp(desksms.DELETE_CONVERSATION_URL, null, { number: number, dates: JSON.stringify(range) });
+      }
     });
   }
 
