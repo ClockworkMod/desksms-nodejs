@@ -562,6 +562,11 @@ var page = new function() {
           return;
         }
 
+        // notify the chrome extension of login success
+        if (window.chrome && window.chrome.extension) {
+          chrome.extension.sendRequest({"event": "login"});
+        }
+
         var logoutButton = $('#desksms-logout');
         logoutButton.attr('href', desksms.getLogoutUrl());
 
