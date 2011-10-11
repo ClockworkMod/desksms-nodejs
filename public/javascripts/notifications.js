@@ -10,7 +10,9 @@ var notifications = new function() {
         sound = 'None';
       if (sound != 'None') {
         $('#notification-' + sound)[0].volume = .3;
-        $('#notification-' + sound)[0].play();
+        // don't play if the extension exists, the extension will play it
+        if ($("#browser-extension-data").length === 0)
+          $('#notification-' + sound)[0].play();
       }
     }
     catch (e) {
