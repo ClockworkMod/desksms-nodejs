@@ -488,68 +488,70 @@ var page = new function() {
       page.setClickHandlers();
     });
   }
+  
+  var setupSearchBox = function() {
+    var loginButton = $('#desksms-login');
+    loginButton.attr('href', desksms.getLoginUrl());
+
+    var input = $('#contact-search');
+    input.keypress(function(event) {
+      if (event.which != 13)
+        return;
+        var conversation = desksms.startConversation(input.val());
+        var conversationElement = $('#conversation-' + conversation.id);
+        if (!conversationElement || conversationElement.length == 0) {
+          page.addConversationToTop(conversation);
+          page.setClickHandlers();
+        }
+        conversationElement = $('#conversation-' + conversation.id);
+        var contactText = $(conversationElement).find('.contact-text');
+        contactText.trigger('click');
+    });
+    input.autocomplete({
+      minLength: 0,
+      source: function(req, res) {
+        if (contacts.list && contacts.list.length > 0) {
+          var matches = filter(contacts.list, function(index, contact) {
+            var term = req.term.toLowerCase();
+            if (contact.name.toLowerCase().indexOf(term) > -1 || contact.numbersOnly.indexOf(term) > -1) {
+              var entry;
+              if (contact.type)
+                entry = sprintf("%s %s - %s", contact.name, contact.number, contact.type);
+              else
+                entry = sprintf("%s %s", contact.name, contact.number);
+              var searchResult = {
+                value: entry,
+                label: entry,
+                contact: contact
+              };
+              return searchResult;
+            }
+          });
+          res(matches);
+        }
+      },
+      select: function(event, ui) {
+        var contact = ui.item.contact;
+        setTimeout(function() {
+          input.val(null);
+        }, 200);
+
+        var conversation = desksms.startConversation(contact.number);
+        var conversationElement = $('#conversation-' + conversation.id);
+        if (!conversationElement || conversationElement.length == 0) {
+          page.addConversationToTop(conversation);
+          page.setClickHandlers();
+        }
+        conversationElement = $('#conversation-' + conversation.id);
+        var contactText = $(conversationElement).find('.contact-text');
+        contactText.trigger('click');
+      }
+    });
+  }
 
   $(document).ready(function() {
-    (function() {
-      var loginButton = $('#desksms-login');
-      loginButton.attr('href', desksms.getLoginUrl());
-
-      var input = $('#contact-search');
-      input.keypress(function(event) {
-        if (event.which != 13)
-          return;
-          var conversation = desksms.startConversation(input.val());
-          var conversationElement = $('#conversation-' + conversation.id);
-          if (!conversationElement || conversationElement.length == 0) {
-            page.addConversationToTop(conversation);
-            page.setClickHandlers();
-          }
-          conversationElement = $('#conversation-' + conversation.id);
-          var contactText = $(conversationElement).find('.contact-text');
-          contactText.trigger('click');
-      });
-      input.autocomplete({
-        minLength: 0,
-        source: function(req, res) {
-          if (contacts.list && contacts.list.length > 0) {
-            var matches = filter(contacts.list, function(index, contact) {
-              if (contact.name.toLowerCase().indexOf(req.term.toLowerCase()) > -1) {
-                var entry;
-                if (contact.type)
-                  entry = sprintf("%s %s - %s", contact.name, contact.number, contact.type);
-                else
-                  entry = sprintf("%s %s", contact.name, contact.number);
-                var searchResult = {
-                  value: entry,
-                  label: entry,
-                  contact: contact
-                };
-                return searchResult;
-              }
-            });
-            res(matches);
-          }
-        },
-        select: function(event, ui) {
-          var contact = ui.item.contact;
-          setTimeout(function() {
-            input.val(null);
-          }, 200);
-
-          var conversation = desksms.startConversation(contact.number);
-          var conversationElement = $('#conversation-' + conversation.id);
-          if (!conversationElement || conversationElement.length == 0) {
-            page.addConversationToTop(conversation);
-            page.setClickHandlers();
-          }
-          conversationElement = $('#conversation-' + conversation.id);
-          var contactText = $(conversationElement).find('.contact-text');
-          contactText.trigger('click');
-        }
-      });
-    })();
-
-
+    setupSearchBox();
+    
     var query = $.query.load(window.location.hash);
     var extension = query.get('extension');
 
