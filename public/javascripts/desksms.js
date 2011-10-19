@@ -118,7 +118,7 @@ var desksms = new function() {
       if (db) {
         db.transaction(function(t) {
           $.each(data.data, function(index, message) {
-            t.executeSql('insert or replace into message (date, number, name, key, message, type, email) values (?, ?, ?, ?, ?, ?, ?)', [message.date, message.number, message.name, message.key, message.message, message.type, data.email]);
+            t.executeSql('insert or replace into message (date, number, name, key, message, type, email) values (?, ?, ?, ?, ?, ?, ?, ?)', [message.date, message.number, message.name, message.key, message.message, message.type, data.email, message.image]);
           });
         }, function(err) {
           console.log(err);
@@ -165,6 +165,10 @@ var desksms = new function() {
         t.executeSql('drop table message');
         t.executeSql('create table if not exists message (date integer not null, number text not null, name text, key text primary key not null, message text, type text, email text not null)');
         version = 2;
+      }
+      if (version == 2) {
+        t.executeSql('alter table message add column image text');
+        version = 3;
       }
     }, null, function() {
       localStorage['desksms.db.version'] = version;
