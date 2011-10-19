@@ -104,14 +104,20 @@
           p New to DeskSMS? Install the DeskSMS Android application to get started! If you have already installed the application, just log in above to send and receive your texts!
           p
             a.btn.small.link(href='https://market.android.com/details?id=com.koushikdutta.desktopsms') Download DeskSMS
+          p.firefox-extension-login.hidden
+            br
+            a.btn.small.link(href='javascript:page.checkLogin()') Click Here After Logging In
         #content-status-not-registered.alert-message.error.hidden
           p Thanks for logging in! Now, you need to install the DeskSMS Android application on your phone send and receive texts!
           p
             a.btn.small.link(href='https://market.android.com/details?id=com.koushikdutta.desktopsms') Download DeskSMS
+          p.firefox-extension-login.hidden
+            br
+            a.btn.small.link(href='javascript:page.checkLogin()') Click Here After Configuring the Android Application
         #content-status.content-status.hidden.alert-message.success
         #error-alert.alert-message.error.hidden
           p#error-text
-
+        
   section#content-container
     #conversation-template.conversation-template.hidden
       .row
@@ -156,9 +162,12 @@
               a.btn.small.contact-action-confirm-no(href='javascript:void(0);') No
 
           div
-            a.contact-text.btn.small.primary(href='javascript:void(0);') Text
-            a.contact-call.btn.small(href='javascript:void(0);') Call
-            a.contact-delete.btn.small(href='javascript:void(0);') Delete
+            span(style='padding-right: 8px')
+              a.contact-text.btn.small.primary(href='javascript:void(0);') Text
+            span(style='padding-right: 8px')
+              a.contact-call.btn.small(href='javascript:void(0);') Call
+            span(style='padding-right: 8px')
+              a.contact-delete.btn.small(href='javascript:void(0);') Delete
   
 
 #browser-extension-data

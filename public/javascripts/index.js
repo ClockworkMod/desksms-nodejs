@@ -421,13 +421,13 @@ var page = new function() {
         console.log(err);
         return;
       }
-      page.hasSuccessfullySynced = true;
       if (messages == null) {
         console.log('no data returned from sms call');
         return;
       }
       if (messages.length == 0)
         return;
+      page.hasSuccessfullySynced = true;
 
       if (!page.hasMarkedRead) {
         page.hasMarkedRead = true;
@@ -548,55 +548,57 @@ var page = new function() {
       }
     });
   }
+  
+  var query = $.query.load(window.location.hash);
+  var extension = query.get('extension');
+  
+  this.checkLogin = function() {
+    desksms.whoami(function(err, data) {
+      if (err || !data.email) {
+        return;
+      }
+
+      // notify the chrome extension of login success
+      $("#chrome-extension-data").text(desksms.email);
+
+      var logoutButton = $('#desksms-logout');
+      logoutButton.attr('href', desksms.getLogoutUrl());
+
+      $('.login-hide').hide();
+      $('.login-show').show();
+      if (!data.registration_id) {
+        $('#content-status-not-registered').show();
+        return;
+      }
+      $('#content-status-not-registered').hide();
+
+      page.refreshInbox(true);
+
+      page.updateExpiration(data.subscription_expiration);
+
+      var startPush = function() {
+        if ($('#push-iframe')[0].contentWindow.startPush) {
+          $('#push-iframe')[0].contentWindow.startPush(desksms.buyerId, function(err, data) {
+            page.refreshInbox();
+          });
+        }
+      }
+      $('#push-iframe')[0].contentWindow.onPushReady = function() {
+        startPush();
+      }
+      startPush();
+    });
+  }
 
   $(document).ready(function() {
     setupSearchBox();
     
-    var query = $.query.load(window.location.hash);
-    var extension = query.get('extension');
+    if (extension == 'firefox') {
+      $('.firefox-extension-login').show();
+    }
 
     // figure out who we are and if we're registered
-    var whoamiLooper = function() {
-      desksms.whoami(function(err, data) {
-        if (err || !data.email) {
-          if (extension == 'firefox')
-            setTimeout(whoamiLooper, 30000);
-          return;
-        }
-
-        // notify the chrome extension of login success
-        $("#chrome-extension-data").text(desksms.email);
-
-        var logoutButton = $('#desksms-logout');
-        logoutButton.attr('href', desksms.getLogoutUrl());
-
-        $('.login-hide').hide();
-        $('.login-show').show();
-        if (!data.registration_id) {
-          $('#content-status-not-registered').show();
-          if (extension == 'firefox')
-            setTimeout(whoamiLooper, 30000);
-          return;
-        }
-
-        page.refreshInbox(true);
-
-        page.updateExpiration(data.subscription_expiration);
-
-        var startPush = function() {
-          if ($('#push-iframe')[0].contentWindow.startPush) {
-            $('#push-iframe')[0].contentWindow.startPush(desksms.buyerId, function(err, data) {
-              page.refreshInbox();
-            });
-          }
-        }
-        $('#push-iframe')[0].contentWindow.onPushReady = function() {
-          startPush();
-        }
-        startPush();
-      });
-    };
-    whoamiLooper();
+    page.checkLogin();
     page.refreshInbox(true);
     
     if (extension) {
