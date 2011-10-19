@@ -118,7 +118,7 @@ var desksms = new function() {
       if (db) {
         db.transaction(function(t) {
           $.each(data.data, function(index, message) {
-            t.executeSql('insert or replace into message (date, number, name, key, message, type, email) values (?, ?, ?, ?, ?, ?, ?, ?)', [message.date, message.number, message.name, message.key, message.message, message.type, data.email, message.image]);
+            t.executeSql('insert or replace into message (date, number, name, key, message, type, email, image) values (?, ?, ?, ?, ?, ?, ?, ?)', [message.date, message.number, message.name, message.key, message.message, message.type, data.email, message.image]);
           });
         }, function(err) {
           console.log(err);
