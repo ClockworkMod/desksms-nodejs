@@ -393,7 +393,7 @@ var page = new function() {
         photoElement.attr('src', facebookPhoto);
         photoElement.error(function() {
           console.log('facebook photo load failed for ' + conversation.number)
-          photoElement.attr('src', 'images/desksms-small.jpg');
+          photoElement.attr('src', 'images/desksms-small.png');
         });
       }
       else {
