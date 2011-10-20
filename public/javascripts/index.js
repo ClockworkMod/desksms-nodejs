@@ -266,7 +266,8 @@ var page = new function() {
     else {
       $(messageElement).find('.message-pending').addClass('hidden');
     }
-    if (message.image) {
+    // check for 'undefined' because thats apparently what websql stores null as, sigh.
+    if (message.image && message.image != 'undefined') {
       var img = $('<img></img>').attr('src', sprintf("%s/%s/%s", desksms.IMAGE_URL, encodeURIComponent(message.number), encodeURIComponent(message.date)));
       $(messageElement).find(".message-content").append(img);
     }
