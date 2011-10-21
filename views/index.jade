@@ -100,20 +100,20 @@
   section#alerts
     .row
       .span9.columns.offset1
-        .alert-message.error.login-hide
+        .alert-message.error.login-hide.hidden
           p New to DeskSMS? Install the DeskSMS Android application to get started! If you have already installed the application, just log in above to send and receive your texts!
           p
             a.btn.small.link(href='https://market.android.com/details?id=com.koushikdutta.desktopsms') Download DeskSMS
           p.firefox-extension-login.hidden
             br
-            a.btn.small.link(href='javascript:page.checkLogin()') Click Here After Logging In
+            a.btn.small(href='javascript:page.checkLogin()') Click Here After Logging In
         #content-status-not-registered.alert-message.error.hidden
           p Thanks for logging in! Now, you need to install the DeskSMS Android application on your phone send and receive texts!
           p
             a.btn.small.link(href='https://market.android.com/details?id=com.koushikdutta.desktopsms') Download DeskSMS
           p.firefox-extension-login.hidden
             br
-            a.btn.small.link(href='javascript:page.checkLogin()') Click Here After Configuring the Android Application
+            a.btn.small(href='javascript:page.checkLogin()') Click Here After Configuring the Android Application
         #content-status.content-status.hidden.alert-message.success
         #error-alert.alert-message.error.hidden
           p#error-text

@@ -193,23 +193,11 @@ var desksms = new function() {
       lastRefresh = new Date().getTime() - 3 * 24 * 60 * 60 * 1000;
 
     var lastEmail = localStorage['desksms.last_email'];
-    var existingMessages = null;
     var refresher = function() {
       console.log(lastRefresh);
       desksms.getSms({ after_date: lastRefresh }, function(err, data) {
         desksms.refreshInProgress = false;
-        var messages;
-        if (existingMessages && existingMessages.length > 0) {
-          if (lastEmail != data.email) {
-            console.log('user change detected, refreshing...');
-            desksms.refreshInbox(cb);
-            return;
-          }
-          messages = existingMessages;
-        }
-        else {
-          messages = [];
-        }
+        var messages = [];
         if (data && data.data)
             messages = messages.concat(data.data);
         $.each(messages, function(index, message) {
@@ -239,7 +227,7 @@ var desksms = new function() {
       db.readTransaction(function(t) {
         t.executeSql('select * from message where date > ? and email = ? order by date asc', [lastRefresh, lastEmail], function(t, results) {
           if (results && results.rows) {
-            existingMessages = [];
+            var existingMessages = [];
             for (var i = 0; i < results.rows.length; i++) {
               var message = results.rows.item(i);
               var conversation = desksms.startConversation(message.number);
@@ -249,6 +237,14 @@ var desksms = new function() {
               existingMessages.push(message)
             }
             console.log('found ' + existingMessages.length + ' cached messages');
+          }
+          $.each(existingMessages, function(index, message) {
+            if (message.type == 'incoming' || message.type == 'outgoing')
+              lastRefresh = Math.max(message.date, lastRefresh);
+          });
+          desksms.lastRefresh = lastRefresh;
+          if (cb) {
+            cb(null, existingMessages);
           }
         });
       }, function(t, err) {

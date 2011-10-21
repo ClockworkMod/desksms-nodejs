@@ -556,6 +556,8 @@ var page = new function() {
   this.checkLogin = function() {
     desksms.whoami(function(err, data) {
       if (err || !data.email) {
+        $('.login-hide').show();
+        $('.login-show').hide();
         return;
       }
 
