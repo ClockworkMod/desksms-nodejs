@@ -23,6 +23,9 @@ var notifications = new function() {
       console.log(webkitNotifications.checkPermission());
       if (webkitNotifications.checkPermission() != 0)
         return;
+      // don't show toast if the extension exists, the extension will show it
+      if ($("#browser-extension-data").length > 0)
+        return;
       var notification = webkitNotifications.createNotification(icon, title, message);
       notification.show();
       setTimeout(function() {
