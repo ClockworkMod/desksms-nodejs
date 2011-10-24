@@ -19,7 +19,7 @@ var notifications = new function() {
       console.log(e);
     }
 
-    if (window.webkitNotifications && !extension) {
+    if (window.webkitNotifications && localStorage['chrome-notifications']) {
       console.log(webkitNotifications.checkPermission());
       if (webkitNotifications.checkPermission() != 0)
         return;
@@ -60,20 +60,35 @@ var notifications = new function() {
     query = $.query.load(window.location.hash);
     extension = query.get('extension');
 
-    if (!window.webkitNotifications || extension) {
+    if (!window.webkitNotifications) {
       $('#enable-chrome-notifications').remove();
       return;
     }
-
-    if (window.webkitNotifications && !extension) {
-      if (webkitNotifications.checkPermission() == 0)
-        $('#enable-chrome-notifications').remove();
+    
+    if (webkitNotifications.checkPermission() == 0 && localStorage['chrome-notifications']) {
+      $('#enable-chrome-notifications-link').text('Disable Chrome Notifications')
+    }
+    else {
+      $('#enable-chrome-notifications-link').text('Enable Chrome Notifications')
     }
   });
   
-  this.requestPermissions = function() {
-    webkitNotifications.requestPermission(function() {
-      $('#enable-chrome-notifications').remove();
-    });
+  this.toggleChromeNotifications = function() {
+    if (webkitNotifications.checkPermission() == 0) {
+      if (localStorage['chrome-notifications']) {
+        delete localStorage['chrome-notifications'];
+        $('#enable-chrome-notifications-link').text('Enable Chrome Notifications')
+      }
+      else {
+        localStorage['chrome-notifications'] = true;
+        $('#enable-chrome-notifications-link').text('Disable Chrome Notifications')
+      }
+    }
+    else {
+      webkitNotifications.requestPermission(function() {
+        localStorage['chrome-notifications'] = true;
+        $('#enable-chrome-notifications-link').text('Disable Chrome Notifications')
+      });
+    }
   }
 }

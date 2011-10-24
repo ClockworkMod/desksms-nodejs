@@ -27,6 +27,8 @@
                     a(href='javascript:page.showNotificationSettings()') Notification
                   li
                     a(href='javascript:page.showDeliveryOptions()') SMS Delivery
+                  li#enable-chrome-notifications
+                    a#enable-chrome-notifications-link(href='javascript:notifications.toggleChromeNotifications()') Enab
                   li.divider
                   li
                     a.connect-google.link(href='javascript:void(0)') Sync Google
@@ -34,8 +36,6 @@
                     a.connect-facebook.link(href='javascript:void(0)') Sync Facebook
                   li
                     a.clear-data.link(href='javascript:page.clearSyncedData()') Clear Synced Data
-                  li#enable-chrome-notifications
-                    a(href='javascript:notifications.requestPermissions()') Chrome Notifications
                   li.divider
                   li
                     a(href='javascript:page.showThemes()') Themes
