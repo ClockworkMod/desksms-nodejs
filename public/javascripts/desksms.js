@@ -274,7 +274,7 @@ var desksms = new function() {
       return;
     }
 
-    $.get('http://desksmspush.deployfu.com:9980/wait/' + encodeURIComponent(desksms.buyerId) + "?nonce=" + new Date().getTime(), function(data) {
+    $.get('http://desksmspush.clockworkmod.com:9980/wait/' + encodeURIComponent(desksms.buyerId) + "?nonce=" + new Date().getTime(), function(data) {
       desksms.push(cb);
       cb(null, data);
     })
