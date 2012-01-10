@@ -58,3 +58,7 @@ div.topbar div.row {
 
     padding-left: 6px;
 }
+
+.message-content {
+  word-wrap: break-word;
+}
