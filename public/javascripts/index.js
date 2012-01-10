@@ -495,6 +495,10 @@ var page = new function() {
     loginButton.attr('href', desksms.getLoginUrl());
 
     var input = $('#contact-search');
+    input.focus();
+    setTimeout(function() {
+      input.focus();
+    }, 50);
     input.keypress(function(event) {
       if (event.which != 13)
         return;
