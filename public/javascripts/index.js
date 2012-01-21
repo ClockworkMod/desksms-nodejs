@@ -498,7 +498,7 @@ var page = new function() {
     input.focus();
     setTimeout(function() {
       input.focus();
-    }, 50);
+    }, 200);
     input.keypress(function(event) {
       if (event.which != 13)
         return;
