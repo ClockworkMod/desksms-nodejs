@@ -11,7 +11,7 @@ var notifications = new function() {
       if (sound != 'None') {
         $('#notification-' + sound)[0].volume = .3;
         // don't play if the extension exists, the extension will play it
-        if ($("#browser-extension-data").length === 0)
+        if ($("#has-chrome-extension").length === 0)
           $('#notification-' + sound)[0].play();
       }
     }
@@ -24,7 +24,7 @@ var notifications = new function() {
       if (webkitNotifications.checkPermission() != 0)
         return;
       // don't show toast if the extension exists, the extension will show it
-      if ($("#browser-extension-data").length > 0)
+      if ($("#has-chrome-extension").length > 0)
         return;
       var notification = webkitNotifications.createNotification(icon, title, message);
       notification.show();
