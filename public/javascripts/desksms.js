@@ -262,32 +262,26 @@ var desksms = new function() {
   
   this.push = function(cb) {
     var desksms = this;
-    var socket = io.connect('http://desksmspush.clockworkmod.com:9980',
+    var socket = io.connect('http://desksmspush.clockworkmod.com:9981',
      {
-       "force new connection": true
+       "reconnect": true,
+       "reconnection limit": 30000,
+       "max reconnection attempts": 1000000
      });
-    function restart() {
-      if (socket) {
-        socket.disconnect();
-        socket = null;
-      }
-      setTimeout(function() {
-        desksms.push(cb);
-      }, 30000);
-    }
-    socket.emit('registration_id', desksms.buyerId);
+    socket.on('connect', function() {
+      console.log('connected');
+      socket.emit('registration_id', desksms.buyerId);
+    })
     socket.on('push', function(msg) {
       cb(null, msg);
     });
     socket.on('disconnect', function() {
       console.log('disconnected');
       cb('disconnected');
-      restart();
     });
     socket.on('error', function() {
       console.log('error');
       console.log(arguments);
-      restart();
     });
   }
 
