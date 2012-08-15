@@ -583,17 +583,9 @@ var page = new function() {
 
       page.updateExpiration(data.subscription_expiration);
 
-      var startPush = function() {
-        if ($('#push-iframe')[0].contentWindow.startPush) {
-          $('#push-iframe')[0].contentWindow.startPush(desksms.buyerId, function(err, data) {
-            page.refreshInbox();
-          });
-        }
-      }
-      $('#push-iframe')[0].contentWindow.onPushReady = function() {
-        startPush();
-      }
-      startPush();
+      desksms.push(function(err, data) {
+        page.refreshInbox();
+      })
     });
   }
 
