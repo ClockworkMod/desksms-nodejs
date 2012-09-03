@@ -262,7 +262,7 @@ var desksms = new function() {
   
   this.push = function(cb) {
     var desksms = this;
-    var socket = io.connect('http://desksmspush.clockworkmod.com:9981',
+    var socket = io.connect('https://desksmspush.clockworkmod.com:9986',
      {
        "reconnect": true,
        "reconnection limit": 30000,
