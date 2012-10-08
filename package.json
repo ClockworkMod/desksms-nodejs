@@ -4,6 +4,6 @@
   , "private": true
   , "dependencies": {
     "jade": ">= 0.0.1",
-    "express": ""
+    "express": "2.5.11"
   }
 }
