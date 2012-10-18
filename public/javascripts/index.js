@@ -600,10 +600,6 @@ var page = new function() {
     page.checkLogin();
     page.refreshInbox(true);
     
-    if (!localStorage['desksms.tablet-notify']) {
-      $('#tabletsms-notification').show();
-    }
-    
     if (extension) {
       $('.link').attr('target', '_blank');
       $('.github-fork').hide();
@@ -1004,10 +1000,5 @@ var page = new function() {
     }
     desksms.clearData();
     window.location.reload();
-  }
-  
-  this.dismissTablet = function() {
-    localStorage['desksms.tablet-notify'] = true;
-    $('#tabletsms-notification').hide();
   }
 }
