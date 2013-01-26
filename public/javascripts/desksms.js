@@ -170,6 +170,10 @@ var desksms = new function() {
         t.executeSql('alter table message add column image text');
         version = 3;
       }
+      if (version == 3) {
+        t.executeSql('create index date_index on message(date)');
+        version = 4;
+      }
     }, null, function() {
       localStorage['desksms.db.version'] = version;
     });
