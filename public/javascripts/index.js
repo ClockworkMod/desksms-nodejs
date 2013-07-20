@@ -778,7 +778,7 @@ var page = new function() {
     $('#buy-dialog').hide();
     var customPayload = { account: desksms.email };
 
-    jsonp(sprintf('https://clockworkbilling.appspot.com/api/v1/order/koushd@gmail.com/desksms.subscription1?custom_payload=%s&buyer_id=%s&sandbox=%s&buyer_email=%s', encodeURIComponent(JSON.stringify(customPayload)), desksms.buyerId, page.sandbox, desksms.email),
+    jsonp(sprintf('https://clockworkbilling.appspot.com/api/v1/order/koushd@gmail.com/desksms.subscription2?custom_payload=%s&buyer_id=%s&sandbox=%s&buyer_email=%s', encodeURIComponent(JSON.stringify(customPayload)), desksms.buyerId, page.sandbox, desksms.email),
       function(err, data) {
         if (err)
           return;
